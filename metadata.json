@@ -1,0 +1,6 @@
+{
+  "name": "Media Prima PRF Management Portal",
+  "description": "Enterprise Payment Requisition Form (PRF) system for HR staff to generate, review, approve, and export audit-ready PDF payment requisitions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,175 @@
+import { PRFItem, RequesterPreset } from '../types';
+
+export const REQUESTER_PRESETS: RequesterPreset[] = [
+  {
+    name: 'SALMAH ALIMUDDIN',
+    staffId: '137800',
+    email: 'salmah@mediaprima.com.my',
+    roleTitle: 'EXE, TALENT DEV. & CULTURE',
+  },
+  {
+    name: 'WAN HUZAIRY BIN WAN HUSSIN',
+    staffId: 'MPB0675',
+    email: 'huzairy@mediaprima.com.my',
+    roleTitle: 'EXE, TALENT DEV. & CULTURE',
+  },
+  {
+    name: 'ERINA SHEREEN BINTI ABDUL JAMIL',
+    staffId: 'MPD0055',
+    email: 'erina@mediaprima.com.my',
+    roleTitle: 'EXE, TALENT DEV. & CULTURE',
+  },
+];
+
+export const DEFAULT_MANAGER = {
+  name: 'NOR INTAN HASALIMAH HASHIM',
+  title: 'SM, STRA. WORKFORCE & CAP. DEV',
+};
+
+export const DEFAULT_HOD = {
+  name: 'DONA SITI ZAWINA DON NAJIB',
+  title: 'GEN. MANAGER, S.O.D.E, GHR',
+};
+
+// Realistic authentic SVG signatures encoded as data URLs for pristine rendering in UI and PDF
+export const SAMPLE_SIGNATURE_REQUESTER = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="70" viewBox="0 0 220 70"><path d="M 20 45 C 35 15, 45 10, 60 40 C 70 58, 85 55, 95 30 C 105 10, 115 50, 130 45 C 145 40, 160 15, 175 35 C 185 48, 195 40, 205 32 M 35 48 L 190 44" fill="none" stroke="%230F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+export const SAMPLE_SIGNATURE_MANAGER = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="70" viewBox="0 0 220 70"><path d="M 25 50 C 40 20, 50 15, 55 45 C 60 62, 75 25, 90 20 C 110 15, 115 55, 135 35 C 150 20, 165 45, 180 30 C 190 20, 200 45, 205 40 M 40 55 C 80 50, 140 45, 195 48" fill="none" stroke="%231E3A8A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+export const SAMPLE_SIGNATURE_HOD = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="70" viewBox="0 0 220 70"><path d="M 25 40 C 35 10, 60 8, 70 38 C 80 60, 95 20, 110 15 C 130 10, 135 55, 155 30 C 170 12, 185 30, 200 25 M 30 52 C 70 48, 130 42, 190 46" fill="none" stroke="%23111827" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+// Media Prima official SVG logo
+export const MEDIA_PRIMA_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="52" viewBox="0 0 180 52"><rect x="0" y="2" width="76" height="48" rx="4" fill="%23ED1C24"/><text x="10" y="34" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="23" font-weight="700" fill="%23FFFFFF" letter-spacing="-0.5">media</text><text x="84" y="34" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="25" font-weight="800" fill="%23111827" letter-spacing="-0.5">prima</text></svg>`;
+
+export const INITIAL_PRF_DATA: PRFItem[] = [
+  {
+    id: 'prf-001',
+    refNo: 'PRF-2026-0042',
+    createdAt: '2026-09-24T09:30:00Z',
+    submissionDate: '24/09/2026',
+    requesterName: 'SALMAH ALIMUDDIN',
+    staffId: '137800',
+    deptSection: 'HUMAN RESOURCES',
+    paymentSlipEmail: 'salmah@mediaprima.com.my',
+    accountName: 'ROYALE CHULAN KUALA LUMPUR',
+    bankName: 'MALAYAN BANKING BERHAD (MAYBANK)',
+    accountNo: '514011598214',
+    program: 'Executive Strategic Leadership Workshop 2026',
+    eventDate: '15 - 17 October 2026',
+    venue: 'Royale Chulan Damansara, Grand Ballroom',
+    budgetCategory: 'Training Budget',
+    budgetBreakdown: [
+      { id: '1', biz: 'Media Prima Television Networks', pax: 14, charge: 8400 },
+      { id: '2', biz: 'The New Straits Times Press', pax: 8, charge: 4800 },
+      { id: '3', biz: 'REV Media Group', pax: 6, charge: 3600 },
+    ],
+    budgetNote: 'note: Including the trainer 1 pax',
+    invoiceNo: 'RC-INV-2026-9041',
+    billAmount: 16800.00,
+    totalAmount: 16800.00,
+    invoiceFileName: 'Royale_Chulan_Tax_Invoice_9041.pdf',
+    invoiceFileSize: '1.4 MB',
+    requesterSignature: SAMPLE_SIGNATURE_REQUESTER,
+    requesterSignatureDate: '24/09/2026',
+    managerSignature: SAMPLE_SIGNATURE_MANAGER,
+    managerSignatureDate: '25/09/2026',
+    managerApprovedAt: '2026-09-25T11:15:00Z',
+    hodSignature: SAMPLE_SIGNATURE_HOD,
+    hodSignatureDate: '26/09/2026',
+    hodApprovedAt: '2026-09-26T14:40:00Z',
+    status: 'successful',
+  },
+  {
+    id: 'prf-002',
+    refNo: 'PRF-2026-0045',
+    createdAt: '2026-09-27T10:15:00Z',
+    submissionDate: '27/09/2026',
+    requesterName: 'WAN HUZAIRY BIN WAN HUSSIN',
+    staffId: 'MPB0675',
+    deptSection: 'HUMAN RESOURCES',
+    paymentSlipEmail: 'huzairy@mediaprima.com.my',
+    accountName: 'INSTITUTE OF CORPORATE DIRECTORS MALAYSIA',
+    bankName: 'CIMB BANK BERHAD',
+    accountNo: '8008741299',
+    program: 'ESG & Corporate Governance Certification Course',
+    eventDate: '03 - 05 November 2026',
+    venue: 'Sime Darby Convention Centre, Bukit Kiara',
+    budgetCategory: 'Training Budget',
+    budgetBreakdown: [
+      { id: '1', biz: 'Corporate & Legal Affairs', pax: 5, charge: 7500 },
+    ],
+    budgetNote: 'note: Including the trainer 1 pax',
+    invoiceNo: 'ICDM-INV-2026-1120',
+    billAmount: 7500.00,
+    totalAmount: 7500.00,
+    invoiceFileName: 'ICDM_Proforma_Invoice_1120.pdf',
+    invoiceFileSize: '820 KB',
+    requesterSignature: SAMPLE_SIGNATURE_REQUESTER,
+    requesterSignatureDate: '27/09/2026',
+    managerSignature: SAMPLE_SIGNATURE_MANAGER,
+    managerSignatureDate: '28/09/2026',
+    managerApprovedAt: '2026-09-28T09:45:00Z',
+    status: 'pending_hod',
+  },
+  {
+    id: 'prf-003',
+    refNo: 'PRF-2026-0048',
+    createdAt: '2026-09-28T14:20:00Z',
+    submissionDate: '28/09/2026',
+    requesterName: 'ERINA SHEREEN BINTI ABDUL JAMIL',
+    staffId: 'MPD0055',
+    deptSection: 'HUMAN RESOURCES',
+    paymentSlipEmail: 'erina@mediaprima.com.my',
+    accountName: 'BERJAYA TIMES SQUARE HOTEL SDN BHD',
+    bankName: 'RHB BANK BERHAD',
+    accountNo: '21415600049210',
+    program: 'Media Technology & Generative AI Masterclass',
+    eventDate: '22 October 2026',
+    venue: 'Manhattan Ballroom, Berjaya Times Square',
+    budgetCategory: 'Training Budget',
+    budgetBreakdown: [
+      { id: '1', biz: 'Digital Content & IT Engineering', pax: 12, charge: 9600 },
+    ],
+    budgetNote: 'note: Including the trainer 1 pax',
+    invoiceNo: 'BTSH-INV-2026-4402',
+    billAmount: 9600.00,
+    totalAmount: 9600.00,
+    invoiceFileName: 'Berjaya_Banquet_Tax_Invoice_4402.pdf',
+    invoiceFileSize: '1.1 MB',
+    requesterSignature: SAMPLE_SIGNATURE_REQUESTER,
+    requesterSignatureDate: '28/09/2026',
+    status: 'pending_manager',
+  },
+  {
+    id: 'prf-004',
+    refNo: 'PRF-2026-0039',
+    createdAt: '2026-09-22T16:00:00Z',
+    submissionDate: '22/09/2026',
+    requesterName: 'SALMAH ALIMUDDIN',
+    staffId: '137800',
+    deptSection: 'HUMAN RESOURCES',
+    paymentSlipEmail: 'salmah@mediaprima.com.my',
+    accountName: 'LE MERIDIEN PETALING JAYA',
+    bankName: 'PUBLIC BANK BERHAD',
+    accountNo: '3190843218',
+    program: 'Annual HR Division Strategic Retreat & Workshop',
+    eventDate: '01 - 02 October 2026',
+    venue: 'Le Meridien Petaling Jaya',
+    budgetCategory: 'Training Budget',
+    budgetBreakdown: [
+      { id: '1', biz: 'Human Resources Division', pax: 25, charge: 18500 },
+    ],
+    budgetNote: 'note: Including the trainer 1 pax',
+    invoiceNo: 'LMPJ-2026-9901',
+    billAmount: 18500.00,
+    totalAmount: 18500.00,
+    invoiceFileName: 'LeMeridien_Quote_9901.pdf',
+    invoiceFileSize: '640 KB',
+    requesterSignature: SAMPLE_SIGNATURE_REQUESTER,
+    requesterSignatureDate: '22/09/2026',
+    status: 'rejected',
+    rejectedBy: 'Manager',
+    rejectionDate: '23/09/2026',
+    rejectionRemarks: 'Insufficient quota allocated under Q3 training budget. Please revise the participant headcount or secure departmental budget variation approval before resubmission.',
+  },
+];
