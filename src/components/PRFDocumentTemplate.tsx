@@ -1,6 +1,6 @@
 import React from 'react';
 import { PRFItem } from '../types';
-import { DEFAULT_MANAGER, DEFAULT_HOD } from '../constants/presets';
+import { DEFAULT_MANAGER, DEFAULT_HOD, MEDIA_PRIMA_SVG } from '../constants/presets';
 
 interface PRFDocumentTemplateProps {
   prf: PRFItem;
@@ -38,22 +38,18 @@ export const PRFDocumentTemplate: React.FC<PRFDocumentTemplateProps> = ({
     >
       {/* Top Header Section */}
       <div className="flex items-start justify-between mb-3 pb-1">
-        {/* Media Prima Logo */}
+        {/* Media Prima Official Logo (Matching download.png) */}
         <div className="flex items-center">
-          <div className="flex items-center gap-1.5">
-            <div
-              className="font-bold text-lg px-2.5 py-1 rounded-xs tracking-tight"
-              style={{ backgroundColor: '#ED1C24', color: '#ffffff' }}
-            >
-              media
-            </div>
-            <div
-              className="font-extrabold text-2xl tracking-tight ml-1"
-              style={{ color: '#000000' }}
-            >
-              prima
-            </div>
-          </div>
+          <img
+            src={MEDIA_PRIMA_SVG}
+            alt="Media Prima"
+            className="h-11 w-auto object-contain"
+            style={{
+              height: '44px',
+              width: 'auto',
+              display: 'block',
+            }}
+          />
         </div>
 
         {/* Finance Department & Document Title */}
@@ -343,7 +339,7 @@ export const PRFDocumentTemplate: React.FC<PRFDocumentTemplateProps> = ({
           </tbody>
         </table>
 
-        {/* Signatures Row */}
+        {/* Signatures Section */}
         <div>
           {/* Signatures Yellow Header */}
           <div
@@ -359,93 +355,112 @@ export const PRFDocumentTemplate: React.FC<PRFDocumentTemplateProps> = ({
             <div className="uppercase">APPROVED BY</div>
           </div>
 
-          {/* Signature Boxes */}
-          <div className="grid grid-cols-3 text-xs min-h-[140px]">
-            {/* Box 1: Prepared by */}
+          {/* 1. Signature Drawings Row */}
+          <div className="grid grid-cols-3 text-xs min-h-[75px]">
+            {/* Box 1: Prepared by Signature */}
             <div
-              className="p-2.5 flex flex-col justify-between"
-              style={{ borderRight: '1px solid #000000', color: '#000000' }}
+              className="p-2 flex items-center justify-center"
+              style={{ borderRight: '1px solid #000000' }}
             >
-              <div>
-                <div className="font-bold uppercase text-[11px] leading-tight" style={{ color: '#000000' }}>
-                  {prf.requesterName}
-                </div>
-                <div className="text-[10px] leading-tight uppercase font-medium" style={{ color: '#1e293b' }}>
-                  EXE, TALENT DEV. & CULTURE
-                </div>
+              {prf.requesterSignature ? (
+                <img
+                  src={prf.requesterSignature}
+                  alt="Requester Signature"
+                  className="max-h-16 max-w-full object-contain"
+                />
+              ) : (
+                <span className="text-[10px] italic" style={{ color: '#94a3b8' }}>[Signature]</span>
+              )}
+            </div>
+
+            {/* Box 2: Verified by Signature */}
+            <div
+              className="p-2 flex items-center justify-center"
+              style={{ borderRight: '1px solid #000000' }}
+            >
+              {prf.managerSignature ? (
+                <img
+                  src={prf.managerSignature}
+                  alt="Manager Signature"
+                  className="max-h-16 max-w-full object-contain"
+                />
+              ) : (
+                <span className="text-[10px] italic" style={{ color: '#94a3b8' }}></span>
+              )}
+            </div>
+
+            {/* Box 3: Approved by Signature */}
+            <div className="p-2 flex items-center justify-center">
+              {prf.hodSignature ? (
+                <img
+                  src={prf.hodSignature}
+                  alt="HOD Signature"
+                  className="max-h-16 max-w-full object-contain"
+                />
+              ) : (
+                <span className="text-[10px] italic" style={{ color: '#94a3b8' }}></span>
+              )}
+            </div>
+          </div>
+
+          {/* 2. Names & Designations Row (Matching image.png) */}
+          <div
+            className="grid grid-cols-3 text-center text-xs py-1.5"
+            style={{
+              borderTop: '1px solid #000000',
+              borderBottom: '1px solid #000000',
+              backgroundColor: '#ffffff',
+            }}
+          >
+            {/* Column 1: Requester */}
+            <div className="px-2" style={{ borderRight: '1px solid #000000' }}>
+              <div className="font-bold uppercase text-[11px] leading-tight" style={{ color: '#000000' }}>
+                {prf.requesterName}
               </div>
-              <div className="my-1.5 flex items-center justify-center h-16">
-                {prf.requesterSignature ? (
-                  <img
-                    src={prf.requesterSignature}
-                    alt="Requester Signature"
-                    className="max-h-16 max-w-full object-contain"
-                  />
-                ) : (
-                  <span className="text-[10px] italic" style={{ color: '#94a3b8' }}>[Pending Signature]</span>
-                )}
-              </div>
-              <div className="font-bold text-[10px] pt-1" style={{ borderTop: '1px dashed #cbd5e1', color: '#000000' }}>
-                DATE: <span className="font-normal" style={{ color: '#000000' }}>{prf.requesterSignatureDate || prf.submissionDate}</span>
+              <div className="text-[10px] leading-tight uppercase font-normal mt-0.5" style={{ color: '#000000' }}>
+                EXE, TALENT DEV. & CULTURE
               </div>
             </div>
 
-            {/* Box 2: Verified by (Manager) */}
-            <div
-              className="p-2.5 flex flex-col justify-between"
-              style={{ borderRight: '1px solid #000000', color: '#000000' }}
-            >
-              <div>
-                <div className="font-bold uppercase text-[11px] leading-tight" style={{ color: '#000000' }}>
-                  {DEFAULT_MANAGER.name}
-                </div>
-                <div className="text-[10px] leading-tight uppercase font-medium" style={{ color: '#1e293b' }}>
-                  {DEFAULT_MANAGER.title}
-                </div>
+            {/* Column 2: Manager (NOR INTAN HASALIMAH HASHIM) */}
+            <div className="px-2" style={{ borderRight: '1px solid #000000' }}>
+              <div className="font-bold uppercase text-[11px] leading-tight" style={{ color: '#000000' }}>
+                NOR INTAN HASALIMAH HASHIM
               </div>
-              <div className="my-1.5 flex items-center justify-center h-16">
-                {prf.managerSignature ? (
-                  <img
-                    src={prf.managerSignature}
-                    alt="Manager Signature"
-                    className="max-h-16 max-w-full object-contain"
-                  />
-                ) : (
-                  <span className="text-[10px] italic" style={{ color: '#94a3b8' }}>[Pending Manager Verification]</span>
-                )}
-              </div>
-              <div className="font-bold text-[10px] pt-1" style={{ borderTop: '1px dashed #cbd5e1', color: '#000000' }}>
-                DATE: <span className="font-normal" style={{ color: '#000000' }}>{prf.managerSignatureDate || '-'}</span>
+              <div className="text-[10px] leading-tight uppercase font-normal mt-0.5" style={{ color: '#000000' }}>
+                SM, STRA. WORKFORCE & CAP. DEV
               </div>
             </div>
 
-            {/* Box 3: Approved by (HOD) */}
-            <div
-              className="p-2.5 flex flex-col justify-between"
-              style={{ color: '#000000' }}
-            >
-              <div>
-                <div className="font-bold uppercase text-[11px] leading-tight" style={{ color: '#000000' }}>
-                  {DEFAULT_HOD.name}
-                </div>
-                <div className="text-[10px] leading-tight uppercase font-medium" style={{ color: '#1e293b' }}>
-                  {DEFAULT_HOD.title}
-                </div>
+            {/* Column 3: HOD (DONA SITI ZAWINA DON NAJIB) */}
+            <div className="px-2">
+              <div className="font-bold uppercase text-[11px] leading-tight" style={{ color: '#000000' }}>
+                DONA SITI ZAWINA DON NAJIB
               </div>
-              <div className="my-1.5 flex items-center justify-center h-16">
-                {prf.hodSignature ? (
-                  <img
-                    src={prf.hodSignature}
-                    alt="HOD Signature"
-                    className="max-h-16 max-w-full object-contain"
-                  />
-                ) : (
-                  <span className="text-[10px] italic" style={{ color: '#94a3b8' }}>[Pending HOD Approval]</span>
-                )}
+              <div className="text-[10px] leading-tight uppercase font-normal mt-0.5" style={{ color: '#000000' }}>
+                GEN. MANAGER, S.O.D.E, GHR
               </div>
-              <div className="font-bold text-[10px] pt-1" style={{ borderTop: '1px dashed #cbd5e1', color: '#000000' }}>
-                DATE: <span className="font-normal" style={{ color: '#000000' }}>{prf.hodSignatureDate || '-'}</span>
-              </div>
+            </div>
+          </div>
+
+          {/* 3. Dates Row (Matching image.png) */}
+          <div
+            className="grid grid-cols-3 text-xs py-1"
+            style={{ backgroundColor: '#ffffff' }}
+          >
+            {/* Column 1: DATE: {{DATE}} */}
+            <div className="px-2 font-bold text-[10px]" style={{ borderRight: '1px solid #000000', color: '#000000' }}>
+              DATE: <span className="font-bold" style={{ color: '#000000' }}>{prf.requesterSignatureDate || prf.submissionDate}</span>
+            </div>
+
+            {/* Column 2: DATE: */}
+            <div className="px-2 font-bold text-[10px]" style={{ borderRight: '1px solid #000000', color: '#000000' }}>
+              DATE: <span className="font-bold" style={{ color: '#000000' }}>{prf.managerSignatureDate || ''}</span>
+            </div>
+
+            {/* Column 3: DATE: */}
+            <div className="px-2 font-bold text-[10px]" style={{ color: '#000000' }}>
+              DATE: <span className="font-bold" style={{ color: '#000000' }}>{prf.hodSignatureDate || ''}</span>
             </div>
           </div>
         </div>

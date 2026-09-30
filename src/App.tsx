@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { User } from 'firebase/auth';
 import { PRFItem } from './types';
 import { INITIAL_PRF_DATA } from './constants/presets';
 import { Sidebar, NavTab } from './components/Sidebar';
@@ -14,6 +15,15 @@ import { PRFPreviewModal } from './components/PRFPreviewModal';
 import { ToastBanner, ToastMessage } from './components/ToastBanner';
 import { downloadPRFAsPDF } from './utils/pdfGenerator';
 import { PRFDocumentTemplate } from './components/PRFDocumentTemplate';
+import {
+  subscribeToPrfs,
+  savePrfToFirestore,
+  updatePrfInFirestore,
+  seedPrfDataIfEmpty,
+  signInWithGoogleAuth,
+  signOutFromAuth,
+  onAuthChange,
+} from './services/firebase';
 
 const STORAGE_KEY = 'media_prima_prf_records_v1';
 
@@ -37,15 +47,40 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [previewPrf, setPreviewPrf] = useState<PRFItem | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  // Sync to local storage
+  // Listen to Firebase Auth state
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(prfs));
-    } catch (e) {
-      console.error('Failed to save PRF records to storage', e);
-    }
-  }, [prfs]);
+    const unsubscribeAuth = onAuthChange((user) => {
+      setCurrentUser(user);
+    });
+    return () => unsubscribeAuth();
+  }, []);
+
+  // Connect to Firestore real-time listener & seed initial data
+  useEffect(() => {
+    // Seed default sample PRF records if Firestore is completely empty
+    seedPrfDataIfEmpty(INITIAL_PRF_DATA).catch((err) => {
+      console.error('Failed to seed initial data:', err);
+    });
+
+    // Real-time listener from Firestore
+    const unsubscribe = subscribeToPrfs(
+      (firestoreItems) => {
+        if (firestoreItems.length > 0) {
+          setPrfs(firestoreItems);
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(firestoreItems));
+          } catch (e) {}
+        }
+      },
+      (error) => {
+        console.error('Realtime Firestore sync error:', error);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
 
   const addToast = (type: 'email' | 'success' | 'warning' | 'error', title: string, description?: string) => {
     const id = `toast-${Date.now()}-${Math.random()}`;
@@ -62,10 +97,36 @@ export default function App() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
-  // Form submission
-  const handleCreateNewPrf = (newPrf: PRFItem) => {
+  // Google Login / Logout handlers
+  const handleSignIn = async () => {
+    try {
+      const user = await signInWithGoogleAuth();
+      if (user) {
+        addToast('success', 'Signed In Successfully', `Welcome, ${user.displayName || user.email}!`);
+      }
+    } catch (err) {
+      addToast('error', 'Sign In Failed', 'Unable to complete Google sign in.');
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOutFromAuth();
+      addToast('success', 'Signed Out', 'You have been signed out.');
+    } catch (err) {
+      addToast('error', 'Sign Out Error', 'Failed to sign out.');
+    }
+  };
+
+  // Form submission: save to Firestore & update local state
+  const handleCreateNewPrf = async (newPrf: PRFItem) => {
     setPrfs((prev) => [newPrf, ...prev]);
-    // Mandatory PRD message: "PRF submitted and escalated to Manager via email"
+    try {
+      await savePrfToFirestore(newPrf);
+    } catch (e) {
+      console.error('Failed to save to Firestore:', e);
+    }
+
     addToast(
       'email',
       'PRF submitted and escalated to Manager via email',
@@ -74,22 +135,25 @@ export default function App() {
     setCurrentTab('manager');
   };
 
-  // Manager Approval
-  const handleManagerApprove = (prfId: string, managerSignature: string) => {
+  // Manager Approval: sync to Firestore
+  const handleManagerApprove = async (prfId: string, managerSignature: string) => {
     const todayStr = new Date().toLocaleDateString('en-GB');
+    const updates = {
+      status: 'pending_hod' as const,
+      managerSignature,
+      managerSignatureDate: todayStr,
+      managerApprovedAt: new Date().toISOString(),
+    };
+
     setPrfs((prev) =>
-      prev.map((item) =>
-        item.id === prfId
-          ? {
-              ...item,
-              status: 'pending_hod',
-              managerSignature,
-              managerSignatureDate: todayStr,
-              managerApprovedAt: new Date().toISOString(),
-            }
-          : item
-      )
+      prev.map((item) => (item.id === prfId ? { ...item, ...updates } : item))
     );
+
+    try {
+      await updatePrfInFirestore(prfId, updates);
+    } catch (e) {
+      console.error('Failed to update Firestore:', e);
+    }
 
     const prf = prfs.find((p) => p.id === prfId);
     addToast(
@@ -99,22 +163,25 @@ export default function App() {
     );
   };
 
-  // Manager Rejection
-  const handleManagerReject = (prfId: string, remarks: string) => {
+  // Manager Rejection: sync to Firestore
+  const handleManagerReject = async (prfId: string, remarks: string) => {
     const todayStr = new Date().toLocaleDateString('en-GB');
+    const updates = {
+      status: 'rejected' as const,
+      rejectedBy: 'Manager' as const,
+      rejectionDate: todayStr,
+      rejectionRemarks: remarks,
+    };
+
     setPrfs((prev) =>
-      prev.map((item) =>
-        item.id === prfId
-          ? {
-              ...item,
-              status: 'rejected',
-              rejectedBy: 'Manager',
-              rejectionDate: todayStr,
-              rejectionRemarks: remarks,
-            }
-          : item
-      )
+      prev.map((item) => (item.id === prfId ? { ...item, ...updates } : item))
     );
+
+    try {
+      await updatePrfInFirestore(prfId, updates);
+    } catch (e) {
+      console.error('Failed to update Firestore:', e);
+    }
 
     addToast(
       'warning',
@@ -123,22 +190,25 @@ export default function App() {
     );
   };
 
-  // HOD Approval
-  const handleHODApprove = (prfId: string, hodSignature: string) => {
+  // HOD Approval: sync to Firestore
+  const handleHODApprove = async (prfId: string, hodSignature: string) => {
     const todayStr = new Date().toLocaleDateString('en-GB');
+    const updates = {
+      status: 'successful' as const,
+      hodSignature,
+      hodSignatureDate: todayStr,
+      hodApprovedAt: new Date().toISOString(),
+    };
+
     setPrfs((prev) =>
-      prev.map((item) =>
-        item.id === prfId
-          ? {
-              ...item,
-              status: 'successful',
-              hodSignature,
-              hodSignatureDate: todayStr,
-              hodApprovedAt: new Date().toISOString(),
-            }
-          : item
-      )
+      prev.map((item) => (item.id === prfId ? { ...item, ...updates } : item))
     );
+
+    try {
+      await updatePrfInFirestore(prfId, updates);
+    } catch (e) {
+      console.error('Failed to update Firestore:', e);
+    }
 
     const prf = prfs.find((p) => p.id === prfId);
     addToast(
@@ -148,22 +218,25 @@ export default function App() {
     );
   };
 
-  // HOD Rejection
-  const handleHODReject = (prfId: string, remarks: string) => {
+  // HOD Rejection: sync to Firestore
+  const handleHODReject = async (prfId: string, remarks: string) => {
     const todayStr = new Date().toLocaleDateString('en-GB');
+    const updates = {
+      status: 'rejected' as const,
+      rejectedBy: 'HOD' as const,
+      rejectionDate: todayStr,
+      rejectionRemarks: remarks,
+    };
+
     setPrfs((prev) =>
-      prev.map((item) =>
-        item.id === prfId
-          ? {
-              ...item,
-              status: 'rejected',
-              rejectedBy: 'HOD',
-              rejectionDate: todayStr,
-              rejectionRemarks: remarks,
-            }
-          : item
-      )
+      prev.map((item) => (item.id === prfId ? { ...item, ...updates } : item))
     );
+
+    try {
+      await updatePrfInFirestore(prfId, updates);
+    } catch (e) {
+      console.error('Failed to update Firestore:', e);
+    }
 
     addToast(
       'warning',
@@ -173,19 +246,22 @@ export default function App() {
   };
 
   // Clone from rejected to draft
-  const handleCloneAsNew = (prf: PRFItem) => {
+  const handleCloneAsNew = (_prf: PRFItem) => {
     setCurrentTab('new_form');
   };
 
   // Reset sample prototype records
-  const handleResetData = () => {
-    if (window.confirm('Reset all PRF records back to initial prototype state?')) {
-      setPrfs(INITIAL_PRF_DATA);
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_PRF_DATA));
-      } catch (e) {}
-      addToast('success', 'Reset Complete', 'Prototype PRF records have been refreshed.');
+  const handleResetData = async () => {
+    setPrfs(INITIAL_PRF_DATA);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_PRF_DATA));
+      for (const item of INITIAL_PRF_DATA) {
+        await savePrfToFirestore(item);
+      }
+    } catch (e) {
+      console.error('Reset error:', e);
     }
+    addToast('success', 'Reset Complete', 'Prototype PRF records have been refreshed in Firestore.');
   };
 
   // Download PDF directly from dashboard
@@ -193,7 +269,6 @@ export default function App() {
     const templateId = `dashboard-download-template-${prf.id}`;
     const success = await downloadPRFAsPDF(templateId, prf);
     if (!success) {
-      alert('Unable to generate PDF. Opening full document preview...');
       setPreviewPrf(prf);
     }
   };
@@ -219,6 +294,9 @@ export default function App() {
           onNavigateToNewForm={() => setCurrentTab('new_form')}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          currentUser={currentUser}
+          onSignIn={handleSignIn}
+          onSignOut={handleSignOut}
         />
 
         {/* View Switcher Container */}

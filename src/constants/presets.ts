@@ -38,8 +38,8 @@ export const SAMPLE_SIGNATURE_MANAGER = `data:image/svg+xml;utf8,<svg xmlns="htt
 
 export const SAMPLE_SIGNATURE_HOD = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="70" viewBox="0 0 220 70"><path d="M 25 40 C 35 10, 60 8, 70 38 C 80 60, 95 20, 110 15 C 130 10, 135 55, 155 30 C 170 12, 185 30, 200 25 M 30 52 C 70 48, 130 42, 190 46" fill="none" stroke="%23111827" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-// Media Prima official SVG logo
-export const MEDIA_PRIMA_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="52" viewBox="0 0 180 52"><rect x="0" y="2" width="76" height="48" rx="4" fill="%23ED1C24"/><text x="10" y="34" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="23" font-weight="700" fill="%23FFFFFF" letter-spacing="-0.5">media</text><text x="84" y="34" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="25" font-weight="800" fill="%23111827" letter-spacing="-0.5">prima</text></svg>`;
+// Media Prima official SVG logo (Exact 1:1 square red box matching download.png)
+export const MEDIA_PRIMA_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="80" viewBox="0 0 220 80"><rect x="0" y="0" width="80" height="80" rx="0" fill="%23ED1C24"/><text x="40" y="46" font-family="-apple-system, BlinkMacSystemFont, Arial, sans-serif" font-size="22" font-weight="800" fill="%23FFFFFF" letter-spacing="-0.5px" text-anchor="middle" dominant-baseline="middle">media</text><text x="95" y="46" font-family="-apple-system, BlinkMacSystemFont, Arial, sans-serif" font-size="26" font-weight="900" fill="%23000000" letter-spacing="-0.8px" dominant-baseline="middle">prima</text></svg>`;
 
 export const INITIAL_PRF_DATA: PRFItem[] = [
   {

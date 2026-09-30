@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 90" width="240" height="90">
+  <rect x="0" y="0" width="90" height="90" fill="#ED1C24" rx="0" />
+  <text x="45" y="52" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif" font-size="25" font-weight="800" letter-spacing="-0.5px" text-anchor="middle" dominant-baseline="middle">media</text>
+  <text x="105" y="52" fill="#000000" font-family="-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8px" dominant-baseline="middle">prima</text>
+</svg>

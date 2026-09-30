@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // PRF Items Collection
+    match /prf_items/{prfId} {
+      allow read: if isValidId(prfId);
+      allow create: if isValidId(prfId);
+      allow update: if isValidId(prfId);
+      allow delete: if isValidId(prfId);
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if isValidId(userId);
+      allow write: if isValidId(userId);
+    }
+
+    // Connection testing
+    match /test/{testId} {
+      allow read, write: if true;
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "entities": {
+    "prfItem": {
+      "title": "Payment Requisition Form Item",
+      "description": "Payment Requisition Form (PRF) record submitted for approval workflow",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "refNo": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "submissionDate": { "type": "string" },
+        "requesterName": { "type": "string" },
+        "staffId": { "type": "string" },
+        "deptSection": { "type": "string" },
+        "paymentSlipEmail": { "type": "string" },
+        "accountName": { "type": "string" },
+        "bankName": { "type": "string" },
+        "accountNo": { "type": "string" },
+        "program": { "type": "string" },
+        "eventDate": { "type": "string" },
+        "venue": { "type": "string" },
+        "budgetCategory": { "type": "string" },
+        "budgetNote": { "type": "string" },
+        "invoiceNo": { "type": "string" },
+        "billAmount": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending_manager", "pending_hod", "successful", "rejected"] },
+        "requesterSignature": { "type": "string" },
+        "requesterSignatureDate": { "type": "string" },
+        "managerSignature": { "type": "string" },
+        "managerSignatureDate": { "type": "string" },
+        "managerApprovedAt": { "type": "string" },
+        "hodSignature": { "type": "string" },
+        "hodSignatureDate": { "type": "string" },
+        "hodApprovedAt": { "type": "string" },
+        "rejectedBy": { "type": "string" },
+        "rejectionDate": { "type": "string" },
+        "rejectionRemarks": { "type": "string" }
+      },
+      "required": ["id", "refNo", "requesterName", "status", "totalAmount"]
+    },
+    "userProfile": {
+      "title": "User Profile",
+      "description": "Staff member profile record in the PRF portal",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["staff", "manager", "hod", "admin"] }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/prf_items/{prfId}": {
+      "schema": "prfItem",
+      "description": "Collection of PRF submissions across verification and approval states"
+    },
+    "/users/{userId}": {
+      "schema": "userProfile",
+      "description": "Staff profile records"
+    }
+  }
+}

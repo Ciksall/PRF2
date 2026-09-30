@@ -11,6 +11,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { PRFItem } from '../types';
+import { MediaPrimaLogo } from './MediaPrimaLogo';
 
 export type NavTab = 'dashboard' | 'new_form' | 'manager' | 'hod' | 'rejected' | 'successful' | 'readme';
 
@@ -84,18 +85,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside className="w-64 bg-[#191C21] text-slate-200 flex flex-col shrink-0 h-screen sticky top-0 border-r border-slate-800 select-none z-20">
       {/* Brand Header */}
-      <div className="p-5 border-b border-slate-800/80">
-        <div className="flex items-center gap-2">
-          <div className="bg-[#ED1C24] text-white font-bold text-sm px-2.5 py-1 rounded tracking-tight shadow-xs">
-            media
-          </div>
-          <div className="text-white font-extrabold text-xl tracking-tight">
-            prima
-          </div>
-        </div>
-        <div className="mt-2.5 flex items-center justify-between text-[11px] text-slate-400">
-          <span className="font-semibold uppercase tracking-wider text-slate-300">PRF Management Portal</span>
+      <div className="p-4 border-b border-slate-800/80">
+        <div className="flex items-center justify-between">
+          <MediaPrimaLogo onWhiteBackground={true} />
           <span className="bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded text-[10px] font-mono">v1.4</span>
+        </div>
+        <div className="mt-2.5 text-[11px] text-slate-400 font-medium px-0.5">
+          Payment Requisition Form Portal
         </div>
       </div>
 
