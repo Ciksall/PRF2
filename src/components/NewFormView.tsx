@@ -13,23 +13,33 @@ import {
 import { PRFItem, BudgetBreakdownItem } from '../types';
 import { REQUESTER_PRESETS, SAMPLE_SIGNATURE_REQUESTER, SAMPLE_SIGNATURE_MANAGER, SAMPLE_SIGNATURE_HOD } from '../constants/presets';
 import { SignaturePad } from './SignaturePad';
+import { UserProfile } from '../services/firebase';
 
 interface NewFormViewProps {
   onSubmit: (prf: PRFItem) => void;
   onCancel: () => void;
+  currentUserProfile?: UserProfile | null;
 }
 
-export const NewFormView: React.FC<NewFormViewProps> = ({ onSubmit, onCancel }) => {
+export const NewFormView: React.FC<NewFormViewProps> = ({ onSubmit, onCancel, currentUserProfile }) => {
   const todayStr = new Date().toLocaleDateString('en-GB'); // DD/MM/YYYY
 
   // Preset default
   const defaultPreset = REQUESTER_PRESETS[0];
 
-  // Form states
-  const [selectedRequesterName, setSelectedRequesterName] = useState(defaultPreset.name);
-  const [staffId, setStaffId] = useState(defaultPreset.staffId);
-  const [deptSection, setDeptSection] = useState('HUMAN RESOURCES');
-  const [paymentSlipEmail, setPaymentSlipEmail] = useState(defaultPreset.email);
+  // Form states - prefill from logged in user if available
+  const [selectedRequesterName, setSelectedRequesterName] = useState(
+    currentUserProfile?.displayName || defaultPreset.name
+  );
+  const [staffId, setStaffId] = useState(
+    currentUserProfile?.staffId || defaultPreset.staffId
+  );
+  const [deptSection, setDeptSection] = useState(
+    currentUserProfile?.deptSection || 'HUMAN RESOURCES'
+  );
+  const [paymentSlipEmail, setPaymentSlipEmail] = useState(
+    currentUserProfile?.email || defaultPreset.email
+  );
   const [submissionDate, setSubmissionDate] = useState(todayStr);
 
   // Expenses fields

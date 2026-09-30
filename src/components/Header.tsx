@@ -1,7 +1,8 @@
 import React from 'react';
-import { PlusCircle, Search, LogIn, LogOut, CheckCircle, Database } from 'lucide-react';
+import { PlusCircle, Search, LogOut, Shield } from 'lucide-react';
 import { User } from 'firebase/auth';
 import { NavTab } from './Sidebar';
+import { UserProfile } from '../services/firebase';
 
 interface HeaderProps {
   currentTab: NavTab;
@@ -9,7 +10,7 @@ interface HeaderProps {
   searchQuery: string;
   onSearchChange: (q: string) => void;
   currentUser: User | null;
-  onSignIn: () => void;
+  userProfile: UserProfile | null;
   onSignOut: () => void;
 }
 
@@ -19,7 +20,7 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery,
   onSearchChange,
   currentUser,
-  onSignIn,
+  userProfile,
   onSignOut,
 }) => {
   const getTabTitle = (tab: NavTab) => {
@@ -42,6 +43,21 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const { title, subtitle } = getTabTitle(currentTab);
+
+  const getRoleBadge = (role?: string) => {
+    switch (role) {
+      case 'manager':
+        return <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 uppercase">Manager</span>;
+      case 'hod':
+        return <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 uppercase">HOD</span>;
+      case 'finance':
+        return <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-100 text-purple-800 uppercase">Finance</span>;
+      case 'admin':
+        return <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-red-100 text-red-800 uppercase">Admin</span>;
+      default:
+        return <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-100 text-slate-700 uppercase">Staff</span>;
+    }
+  };
 
   return (
     <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between sticky top-0 z-10">
@@ -69,7 +85,7 @@ export const Header: React.FC<HeaderProps> = ({
             placeholder="Search PRF, Requester, Invoice..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg w-56 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition"
+            className="pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg w-52 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition"
           />
         </div>
 
@@ -84,46 +100,39 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         )}
 
-        {/* User Auth Info */}
+        {/* User Auth Info & Sign Out */}
         <div className="flex items-center border-l border-slate-200 pl-3">
-          {currentUser ? (
-            <div className="flex items-center gap-2">
-              {currentUser.photoURL ? (
-                <img
-                  src={currentUser.photoURL}
-                  alt={currentUser.displayName || 'User'}
-                  className="w-7 h-7 rounded-full border border-slate-200"
-                />
-              ) : (
-                <div className="w-7 h-7 rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
-                  {currentUser.email?.charAt(0).toUpperCase() || 'U'}
-                </div>
-              )}
-              <div className="hidden sm:block text-left">
-                <div className="text-[11px] font-bold text-slate-800 truncate max-w-[120px]">
-                  {currentUser.displayName || currentUser.email?.split('@')[0]}
-                </div>
-                <div className="text-[9px] text-slate-400 truncate max-w-[120px]">
-                  {currentUser.email}
-                </div>
+          <div className="flex items-center gap-2.5">
+            {currentUser?.photoURL ? (
+              <img
+                src={currentUser.photoURL}
+                alt={userProfile?.displayName || 'User'}
+                className="w-8 h-8 rounded-full border border-slate-200 object-cover"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-[#191C21] text-white flex items-center justify-center text-xs font-bold shadow-xs">
+                {(userProfile?.displayName || currentUser?.email || 'U').charAt(0).toUpperCase()}
               </div>
-              <button
-                onClick={onSignOut}
-                title="Sign Out"
-                className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-md transition"
-              >
-                <LogOut className="w-3.5 h-3.5" />
-              </button>
+            )}
+            <div className="hidden sm:block text-left">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[11px] font-bold text-slate-900 truncate max-w-[120px]">
+                  {userProfile?.displayName || currentUser?.displayName || currentUser?.email?.split('@')[0]}
+                </span>
+                {getRoleBadge(userProfile?.role)}
+              </div>
+              <div className="text-[9px] text-slate-400 truncate max-w-[130px]">
+                {currentUser?.email}
+              </div>
             </div>
-          ) : (
             <button
-              onClick={onSignIn}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-lg transition"
+              onClick={onSignOut}
+              title="Log Keluar (Sign Out)"
+              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition ml-1"
             >
-              <LogIn className="w-3.5 h-3.5" />
-              <span>Google Login</span>
+              <LogOut className="w-4 h-4" />
             </button>
-          )}
+          </div>
         </div>
       </div>
     </header>

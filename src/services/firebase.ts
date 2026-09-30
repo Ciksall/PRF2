@@ -1,5 +1,15 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+  User,
+} from 'firebase/auth';
 import {
   getFirestore,
   doc,
@@ -7,6 +17,7 @@ import {
   onSnapshot,
   setDoc,
   updateDoc,
+  getDoc,
   getDocs,
   getDocFromServer,
 } from 'firebase/firestore';
@@ -48,6 +59,17 @@ export interface FirestoreErrorInfo {
   };
 }
 
+export interface UserProfile {
+  uid: string;
+  email: string;
+  displayName: string;
+  role: 'staff' | 'manager' | 'hod' | 'finance' | 'admin';
+  deptSection?: string;
+  staffId?: string;
+  createdAt: string;
+  lastLoginAt: string;
+}
+
 // Global Firestore Error Handler as specified in Skill
 export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
   const errInfo: FirestoreErrorInfo = {
@@ -80,14 +102,131 @@ export async function testConnection() {
     }
   }
 }
-// Run connection test on module load
 testConnection();
 
-// Firestore PRF Collection path
+// Firestore Collections
 const PRF_COLLECTION = 'prf_items';
+const USERS_COLLECTION = 'users';
 
 /**
- * Realtime listener for PRF records
+ * Save user profile in Firestore
+ */
+export async function saveUserProfile(profile: UserProfile): Promise<void> {
+  const docRef = doc(db, USERS_COLLECTION, profile.uid);
+  try {
+    await setDoc(docRef, profile, { merge: true });
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, `${USERS_COLLECTION}/${profile.uid}`);
+  }
+}
+
+/**
+ * Get user profile from Firestore
+ */
+export async function getUserProfile(uid: string): Promise<UserProfile | null> {
+  const docRef = doc(db, USERS_COLLECTION, uid);
+  try {
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      return snap.data() as UserProfile;
+    }
+    return null;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.GET, `${USERS_COLLECTION}/${uid}`);
+    return null;
+  }
+}
+
+/**
+ * Sign up with Email and Password
+ */
+export async function signUpWithEmail(
+  email: string,
+  pass: string,
+  displayName: string,
+  role: 'staff' | 'manager' | 'hod' | 'finance' | 'admin' = 'staff',
+  deptSection: string = 'HUMAN RESOURCES',
+  staffId: string = ''
+): Promise<UserProfile> {
+  const credential = await createUserWithEmailAndPassword(auth, email, pass);
+  await updateProfile(credential.user, { displayName });
+
+  const profile: UserProfile = {
+    uid: credential.user.uid,
+    email: credential.user.email || email,
+    displayName: displayName || email.split('@')[0],
+    role,
+    deptSection,
+    staffId: staffId || `MP-${Math.floor(1000 + Math.random() * 9000)}`,
+    createdAt: new Date().toISOString(),
+    lastLoginAt: new Date().toISOString(),
+  };
+
+  await saveUserProfile(profile);
+  return profile;
+}
+
+/**
+ * Sign in with Email and Password
+ */
+export async function signInWithEmail(email: string, pass: string): Promise<UserProfile> {
+  const credential = await signInWithEmailAndPassword(auth, email, pass);
+  const uid = credential.user.uid;
+  let profile = await getUserProfile(uid);
+
+  if (!profile) {
+    profile = {
+      uid,
+      email: credential.user.email || email,
+      displayName: credential.user.displayName || email.split('@')[0],
+      role: 'staff',
+      deptSection: 'HUMAN RESOURCES',
+      staffId: `MP-${Math.floor(1000 + Math.random() * 9000)}`,
+      createdAt: new Date().toISOString(),
+      lastLoginAt: new Date().toISOString(),
+    };
+    await saveUserProfile(profile);
+  } else {
+    await saveUserProfile({ ...profile, lastLoginAt: new Date().toISOString() });
+  }
+
+  return profile;
+}
+
+/**
+ * Auth helper - Sign in with Google Popup
+ */
+export async function signInWithGoogleAuth(): Promise<{ user: User; profile: UserProfile }> {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    let profile = await getUserProfile(user.uid);
+
+    if (!profile) {
+      profile = {
+        uid: user.uid,
+        email: user.email || '',
+        displayName: user.displayName || user.email?.split('@')[0] || 'Staff Member',
+        role: 'staff',
+        deptSection: 'HUMAN RESOURCES',
+        staffId: `MP-${Math.floor(1000 + Math.random() * 9000)}`,
+        createdAt: new Date().toISOString(),
+        lastLoginAt: new Date().toISOString(),
+      };
+      await saveUserProfile(profile);
+    } else {
+      await saveUserProfile({ ...profile, lastLoginAt: new Date().toISOString() });
+    }
+
+    return { user, profile };
+  } catch (error) {
+    console.error('Google Sign In Error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Realtime listener for PRF records stored in Firebase
  */
 export function subscribeToPrfs(
   onSuccess: (items: PRFItem[]) => void,
@@ -130,7 +269,7 @@ export async function savePrfToFirestore(prf: PRFItem): Promise<void> {
 }
 
 /**
- * Update partial fields of a PRF item
+ * Update partial fields of a PRF item in Firestore
  */
 export async function updatePrfInFirestore(prfId: string, updates: Partial<PRFItem>): Promise<void> {
   const docRef = doc(db, PRF_COLLECTION, prfId);
@@ -157,19 +296,6 @@ export async function seedPrfDataIfEmpty(initialData: PRFItem[]): Promise<void> 
     }
   } catch (error) {
     handleFirestoreError(error, OperationType.GET, PRF_COLLECTION);
-  }
-}
-
-/**
- * Auth helper - Sign in with Google Popup
- */
-export async function signInWithGoogleAuth(): Promise<User | null> {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    return result.user;
-  } catch (error) {
-    console.error('Google Sign In Error:', error);
-    throw error;
   }
 }
 

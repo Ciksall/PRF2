@@ -12,6 +12,10 @@ import {
   Info,
   Clock,
   Award,
+  Database,
+  Lock,
+  Flame,
+  FileCheck,
 } from 'lucide-react';
 import { REQUESTER_PRESETS, DEFAULT_MANAGER, DEFAULT_HOD } from '../constants/presets';
 import { NavTab } from './Sidebar';
@@ -33,7 +37,7 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
             <div>
               <h2 className="text-lg font-bold text-slate-900">Media Prima PRF System Documentation & README</h2>
               <p className="text-xs text-slate-500">
-                Official guide for Payment Requisition Form workflows, lookup rules, signatures, and PDF generation.
+                Panduan komprehensif bagi aliran kerja PRF, pengkalan data Firebase, log masuk pelbagai pengguna, dan spesifikasi templat.
               </p>
             </div>
           </div>
@@ -50,14 +54,64 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
         </div>
 
         <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center gap-4 text-xs text-slate-600">
-          <span className="flex items-center gap-1.5 font-medium">
-            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-            Version 1.4 Active
+          <span className="flex items-center gap-1.5 font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Version 2.0 (Firebase Cloud Active)
           </span>
           <span className="text-slate-300">·</span>
           <span>Target Template: <strong>SAMPLE PRF Royale Chulan_2.docx</strong></span>
           <span className="text-slate-300">·</span>
-          <span>Compliance: <strong>No Cost Center / No Broadcast Location</strong></span>
+          <span>Database: <strong>Cloud Firestore (asia-southeast1)</strong></span>
+        </div>
+      </div>
+
+      {/* Recent Updates Callout Card */}
+      <div className="bg-gradient-to-r from-red-50/70 via-white to-slate-50 p-5 rounded-2xl border border-red-100 shadow-2xs space-y-3">
+        <div className="flex items-center gap-2 text-[#ED1C24] font-bold text-xs uppercase tracking-wider">
+          <Sparkles className="w-4 h-4 text-amber-500" />
+          <span>Ringkasan Perubahan & Ciri Terkini yang Ditambah</span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+              <Flame className="w-4 h-4 text-orange-500" />
+              <span>Firebase Cloud Firestore Terhubung</span>
+            </div>
+            <p className="text-slate-600 text-[11px] leading-relaxed">
+              Semua borang PRF, pecahan bajet, lampiran invois, dan tandatangan digital kini disimpan secara kekal dan disegerakkan secara masa-nyata (real-time sync) melalui Firestore.
+            </p>
+          </div>
+
+          <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+              <Lock className="w-4 h-4 text-blue-600" />
+              <span>Halaman Sign In & Sign Up Wajib</span>
+            </div>
+            <p className="text-slate-600 text-[11px] leading-relaxed">
+              Pengguna baharu atau sesi belum log masuk diwajibkan mendaftar atau log masuk terlebih dahulu melalui Google 1-klik atau emel rasmi Media Prima sebelum mengakses portal.
+            </p>
+          </div>
+
+          <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+              <Award className="w-4 h-4 text-red-600" />
+              <span>Logo Media Prima Sebijik Rasmi</span>
+            </div>
+            <p className="text-slate-600 text-[11px] leading-relaxed">
+              Logo kini menyalin 100% tepat imej korporat: nisbah 1:1 kotak merah bucu tajam (#ED1C24), teks "media" putih tebal, dan teks "prima" hitam pekat tebal (font-weight: 900).
+            </p>
+          </div>
+
+          <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+              <FileCheck className="w-4 h-4 text-emerald-600" />
+              <span>Grid Tandatangan Standard 3-Baris</span>
+            </div>
+            <p className="text-slate-600 text-[11px] leading-relaxed">
+              Susun atur pengesahan PRF dikemas kini mengikut spesifikasi gambar dengan baris atas bagi tandatangan, baris tengah bagi nama & jawatan penuh, dan baris bawah bagi tarikh.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -78,7 +132,7 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
               <div>
                 <strong className="text-slate-900 block">Form Drafting (New Form)</strong>
                 <p className="text-slate-500">
-                  Select Requester from dropdown. Staff ID and Email auto-fill. Enter payment details, attach invoice, and draw/upload digital signature.
+                  Select Requester from dropdown or auto-filled from current logged-in user profile. Enter payment details, attach invoice, and draw/upload digital signature.
                 </p>
               </div>
             </li>
@@ -121,7 +175,7 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
           </ol>
         </div>
 
-        {/* Section 2: Preset Lookup Directory */}
+        {/* Section 2: Preset Personnel Directory */}
         <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-4">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
             <Users className="w-4 h-4 text-[#ED1C24]" />
@@ -175,7 +229,7 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
               Corporate Header & Logo
             </div>
             <p className="text-slate-600 text-[11px] leading-relaxed">
-              Official Media Prima vector logo (red box with white "media", bold black "prima") aligned left, and Finance Department title with 6 indexing boxes aligned right.
+              Official Media Prima vector logo (1:1 sharp square red box with white "media", bold black "prima") aligned left, and Finance Department title with 6 indexing boxes aligned right.
             </p>
           </div>
 

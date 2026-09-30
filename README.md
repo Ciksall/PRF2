@@ -1,94 +1,103 @@
 # Media Prima Payment Requisition Form (PRF) Management Portal
 
-Enterprise Payment Requisition Form (PRF) system for Media Prima Berhad HR staff to generate, review, approve, and export audit-ready PDF payment requisitions.
+Enterprise Payment Requisition Form (PRF) system for Media Prima Berhad to generate, review, approve, and export audit-ready PDF payment requisitions with Firebase Cloud Firestore and multi-user authentication.
 
 ---
 
 ## 🌟 Overview & Objectives
 
-The **Media Prima PRF Management Portal** simplifies PRF creation and eliminates paper-based routing. It provides an intuitive 6-stage workflow for HR personnel, managers, and heads of department (HOD) to manage payment requisitions with digital signatures, rigorous audit trails, and instant PDF generation strictly matching the official corporate template (`SAMPLE PRF Royale Chulan_2.docx`).
+The **Media Prima PRF Management Portal** simplifies PRF creation and eliminates paper-based routing. It provides an intuitive end-to-end workflow for HR personnel, managers, and heads of department (HOD) to manage payment requisitions with digital signatures, rigorous audit trails, multi-user authentication, and instant PDF generation strictly matching the official corporate template (`SAMPLE PRF Royale Chulan_2.docx`).
 
 ---
 
-## 📋 Key Features
+## 🚀 Log Perubahan Terkini (Changelog & Recent Updates)
 
-### 1. 6-Item Workflow Navigation
-- 📊 **Dashboard**: Real-time KPI cards (Total Submissions, Pending Manager, Pending HOD, Successful, Rejected, Total MYR volume), quick filter tabs, live search, and recent submissions table.
-- 📝 **New Form**: Two-column layout with auto-filled staff credentials, expenses breakdown table (`BIZ` / `PAX` / `CHARGE`), attachment upload, and digital signature pads.
-- 👔 **Manager Queue**: Verification queue for Senior Managers (SM Nor Intan Hasalimah Hashim) to review details, attach digital signatures, approve to escalate, or reject with mandatory remarks.
-- 👑 **HOD Queue**: Executive authorization queue for General Managers (GM Dona Siti Zawina Don Najib) to grant final approval.
-- ❌ **Rejected Tab**: Historical audit register displaying all non-approved requisitions with compulsory justifications and 1-click resubmission.
-- ✅ **Successful Tab & PDF Export**: Instant download of high-resolution, print-ready PDFs mirroring the exact Media Prima template.
-- 📖 **README Hub**: Complete in-app interactive documentation, PRD specifications, and user manual.
+### 1. 🔥 Integrasi Firebase Cloud Firestore (Penyimpanan Masa-Nyata)
+- **Pengkalan Data Awan Berpusat**: Mengintegrasikan **Firebase Cloud Firestore** (wilayah `asia-southeast1`, Database ID: `ai-studio-mediaprimaprfman-79482b94-7bf6-488b-a1a6-c5a72dbe048b`).
+- **Penyegerakan Masa-Nyata (*Real-Time Sync*)**: Semua data borang PRF (`prf_items`), butiran pecahan bajet (`budgetBreakdown`), pautan invois, tandatangan digital, dan status audit dikemas kini serta-merta tanpa perlu memuat semula halaman.
+- **Keselamatan Firestore Rules**: Dilindungi oleh peraturan keselamatan ketat (`firestore.rules`) dengan pengesahan ID dan kawalan capaian berasaskan peranan (RBAC).
 
-### 2. Auto-Fill & Preset Lookup Rules
-When selecting a Requester Name on the **New Form**, the system automatically populates the corresponding Staff ID and Payment Slip Email:
+### 2. 🔐 Gerbang Keselamatan & Log Masuk Pelbagai Pengguna (*Multi-User Auth Gate*)
+- **Skrin Mula Wajib Log Masuk**: Pengguna baharu atau sesi belum sah akan dipaparkan halaman **Log Masuk (Sign In)** atau **Daftar Akaun (Sign Up)** terlebih dahulu sebelum dibenarkan mengakses portal.
+- **Kaedah Log Masuk Fleksibel**:
+  - **Google Single Sign-On (1-Klik)**: Log masuk pantas menggunakan akaun Google Media Prima.
+  - **Daftar Akaun / Log Masuk Emel & Kata Laluan**: Membolehkan pendaftaran kakitangan dengan nama penuh, No. ID Staf, bahagian/jabatan, dan pemilihan peranan (*Staff/Requester, Manager, HOD, Finance*).
+  - **Profil Demo Segera**: Butang 1-klik untuk menguji peranan Salmah (*Requester*), Nor Intan (*Manager*), atau Dona Zawina (*HOD*).
+- **Pengurusan Profil (`users/{userId}`)**: Profil pengguna disimpan dalam Firestore dan dipaparkan pada Header serta bahagian bawah Sidebar bersama butang **Log Keluar (Sign Out)**.
+- **Auto-Isi Borang**: Borang *New PRF* secara pintar mengisi maklumat pemohon mengikut profil pengguna yang sedang log masuk.
 
-| Requester Name | Staff ID | Payment Email | Department |
-| :--- | :--- | :--- | :--- |
-| **SALMAH ALIMUDDIN** | `137800` | `salmah@mediaprima.com.my` | Human Resources |
-| **WAN HUZAIRY BIN WAN HUSSIN** | `MPB0675` | `huzairy@mediaprima.com.my` | Human Resources |
-| **ERINA SHEREEN BINTI ABDUL JAMIL** | `MPD0055` | `erina@mediaprima.com.my` | Human Resources |
+### 3. 🎨 Logo Rasmi Media Prima 100% Mengikut Spesifikasi Korporat
+- Menepati imej rasmi `download.png` secara **100% tepat (sebijik)**:
+  - Kotak merah berbentuk segi empat tepat nisbah 1:1 (`aspectRatio: 1 / 1`) dengan bucu tajam 90 darjah (`rx="0"`, `borderRadius: 0px`) menggunakan warna korporat rasmi `#ED1C24`.
+  - Tulisan `"media"` huruf kecil berwarna putih `#FFFFFF` tebal (*extrabold*) di tengah kotak merah.
+  - Tulisan `"prima"` huruf kecil berwarna hitam `#000000` tebal (*font-weight: 900*) bersebelahan kotak merah dengan jajaran dasar (*baseline*) yang seimbang.
+  - Dioptimumkan dalam bentuk vektor SVG resolusi tinggi (`MEDIA_PRIMA_SVG`) tanpa lengah masa muat turun PDF.
 
-### 3. Strict Compliance Guidelines
-- **Omitted Fields**: Per corporate requirements, **Cost Center** and **Broadcast Location** fields are explicitly excluded.
-- **Digital Signatures**: Multi-mode signature input supporting:
-  - ✍️ Interactive HTML5 canvas drawing pad
-  - 📤 Image upload (PNG, JPG, SVG)
-  - ⚡ 1-click authentic executive signature presets
-- **Mandatory Rejection Justifications**: Any rejection by Manager or HOD requires detailed remarks to be entered into the permanent audit trail.
-- **Simulated Email Notifications**: Immediate feedback toasts (e.g., *"PRF submitted and escalated to Manager via email"*).
-
-### 4. PDF Generation & Document Layout
-The downloaded PDF reproduces the layout of `SAMPLE PRF Royale Chulan_2.docx`:
-- **Header**: Official Media Prima red/black corporate logo at top left, "FINANCE DEPARTMENT / PAYMENT REQUISITION FORM" at top right with the 6-box indexing grid.
-- **Section A (Requester's Particulars)**: Yellow header bar (`#FFF03F`), bordered table with Name, Staff No., Department, and Date.
-- **Section B (Expenses Details)**:
-  - Payee Account Name, Bank Name, Account Number, Payment Slip Email
-  - Program Title, Event Date, Venue, Budget Category
-  - Nested `BIZ` / `PAX` / `CHARGE (MYR)` breakdown table and note
-  - Invoice No. and formatted Amount (MYR)
-  - Signature Grid:
-    - **Prepared By**: Requester Name & Title with embedded signature
-    - **Verified By**: NOR INTAN HASALIMAH HASHIM (SM, STRA. WORKFORCE & CAP. DEV)
-    - **Approved By**: DONA SITI ZAWINA DON NAJIB (GEN. MANAGER, S.O.D.E, GHR)
-- **Section C (Finance Dept. Use)**: Verification and approval placeholder grid.
+### 4. ✍️ Penambahbaikan Grid Tandatangan PRF (Mengikut `image.png`)
+- Mengemaskini bahagian pengesahan dokumen mengikut susun atur standard 3 baris:
+  - **Baris 1 (Atas)**: Petak tandatangan digital bagi ketiga-tiga lajur (`PREPARED BY`, `VERIFIED BY`, `APPROVED BY`).
+  - **Baris 2 (Tengah - Sempadan Garisan Hitam Penuh)**:
+    - **Lajur 1**: `{{REQUESTER NAME}}` & `EXE, TALENT DEV. & CULTURE`
+    - **Lajur 2**: `NOR INTAN HASALIMAH HASHIM` & `SM, STRA. WORKFORCE & CAP. DEV`
+    - **Lajur 3**: `DONA SITI ZAWINA DON NAJIB` & `GEN. MANAGER, S.O.D.E, GHR`
+  - **Baris 3 (Bawah - Sempadan Garisan Hitam Penuh)**:
+    - **Lajur 1**: `DATE: {{DATE}}`
+    - **Lajur 2**: `DATE: [Tarikh Pengesahan Manager]`
+    - **Lajur 3**: `DATE: [Tarikh Kelulusan HOD]`
 
 ---
 
-## 🛠️ Technology Stack
+## 📋 Ciri-Ciri Utama Sistem
 
-- **Frontend Framework**: React 19 with TypeScript
-- **Styling**: Tailwind CSS v4 with custom executive theme (`#ED1C24` Media Prima red)
-- **Icons**: Lucide React
-- **Document & PDF Export**: jsPDF + html2canvas with custom OKLCH style sanitization
-- **State & Persistence**: LocalStorage persistence (`media_prima_prf_records_v1`)
+### 1. Navigasi Aliran Kerja 6 Peringkat
+- 📊 **Dashboard**: Metrik KPI masa-nyata, ringkasan status, penapisan pantas, dan carian teks penuh.
+- 📝 **New Form**: Borang dua lajur dengan pra-isi automatik daripada profil pengguna, jadual pecahan kos, muat naik lampiran invois, dan pad tandatangan digital interaktif.
+- 👔 **Manager Queue**: Giliran semakan untuk Pengurus Kanan (SM Nor Intan Hasalimah Hashim) menandatangani pengesahan atau menolak dengan ulasan mandatori.
+- 👑 **HOD Queue**: Giliran kelulusan eksekutif untuk Pengurus Besar (GM Dona Siti Zawina Don Najib) sebelum dana dilepaskan oleh Bahagian Kewangan.
+- ❌ **Rejected Tab**: Daftar audit sejarah semua borang yang ditolak berserta justifikasi rasmi dan fungsi klon 1-klik untuk pembetulan.
+- ✅ **Successful Tab & PDF Export**: Arkib borang yang telah diluluskan sepenuhnya dengan muat turun PDF berketepatan tinggi.
+- 📖 **README Hub**: Dokumentasi interaktif dalam aplikasi dan panduan pengguna.
+
+### 2. Jadual Kakitangan & Pratetap
+| Nama Kakitangan | No. ID Staf | Emel Rasmi | Jabatan | Peranan |
+| :--- | :--- | :--- | :--- | :--- |
+| **SALMAH ALIMUDDIN** | `137800` | `salmah@mediaprima.com.my` | Human Resources | Staff / Requester |
+| **NOR INTAN HASALIMAH HASHIM** | `MPB0421` | `norintan@mediaprima.com.my` | Workforce & Cap. Dev | Senior Manager (Pengesah) |
+| **DONA SITI ZAWINA DON NAJIB** | `MPB0118` | `dona.zawina@mediaprima.com.my` | S.O.D.E, GHR | General Manager (Pelulus) |
+| **WAN HUZAIRY BIN WAN HUSSIN** | `MPB0675` | `huzairy@mediaprima.com.my` | Human Resources | Staff / Requester |
+| **ERINA SHEREEN BINTI ABDUL JAMIL** | `MPD0055` | `erina@mediaprima.com.my` | Human Resources | Staff / Requester |
+
+### 3. Pematuhan Garis Panduan Korporat
+- **Pengecualian Medan**: Medan **Cost Center** dan **Broadcast Location** dikecualikan sepenuhnya mengikut ketetapan dokumen PRD.
+- **Tandatangan Digital Berbilang Mod**:
+  - ✍️ Pad lukisan interaktif kanvas HTML5
+  - 📤 Muat naik imej tandatangan (PNG, JPG, SVG)
+  - ⚡ Pratetap tandatangan rasmi 1-klik
+- **Ulasan Penolakan Mandatori**: Setiap penolakan oleh Pengurus atau HOD mewajibkan input ulasan yang disimpan kekal dalam log audit.
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Rangkaian Teknologi (Tech Stack)
 
-### Local Development
+- **Frontend Framework**: React 19 dengan TypeScript & Vite
+- **Pangkalan Data & Auth**: Google Firebase Cloud Firestore & Firebase Authentication
+- **Gaya Visual**: Tailwind CSS v4 dengan tema eksekutif Media Prima (`#ED1C24`)
+- **Ikon**: Lucide React
+- **Eksport PDF Dokumen**: jsPDF + html2canvas dengan sokongan vektor grafik bebas ralat warna OKLCH
+
+---
+
+## 🚀 Panduan Menjalankan Aplikasi
+
+### Pembangunan Tempatan (Local Development)
 ```bash
 npm install
 npm run dev
 ```
-The application will start on `http://localhost:3000`.
+Aplikasi akan beroperasi pada `http://localhost:3000`.
 
-### Building for Production
+### Membina untuk Pengeluaran (Production Build)
 ```bash
 npm run build
 ```
-
----
-
-## 🧪 Testing Checklist
-
-1. **Auto-Fill Verification**: Open **New Form**, select "WAN HUZAIRY BIN WAN HUSSIN", and verify Staff ID (`MPB0675`) and Email (`huzairy@mediaprima.com.my`) fill automatically.
-2. **Field Omission**: Confirm that neither "Cost Center" nor "Broadcast Location" appears on the form.
-3. **Escalation**: Submit a new PRF and verify the notification banner appears and the item routes to the **Manager Queue**.
-4. **Manager Approval**: Go to **Manager Queue**, attach signature (or click "Quick Preset"), and approve. Verify it transfers to the **HOD Queue**.
-5. **HOD Approval**: Go to **HOD Queue**, attach HOD signature, and approve. Confirm it transfers to the **Successful Tab**.
-6. **PDF Download**: In the **Successful Tab**, click "Download PDF" or "View Document" to inspect the layout.
-7. **Rejection Remarks**: Reject a form from either queue, verify mandatory remarks validation, and check the **Rejected Tab**.
-8. **Reset Data**: Click "Reset Sample Records" in the sidebar footer anytime to restore default testing records.
+Menjalankan semakan jenis TypeScript (`tsc --noEmit`) dan kompilasi Vite tanpa sebarang ralat.

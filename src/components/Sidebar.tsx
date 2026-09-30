@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { PRFItem } from '../types';
 import { MediaPrimaLogo } from './MediaPrimaLogo';
+import { UserProfile } from '../services/firebase';
 
 export type NavTab = 'dashboard' | 'new_form' | 'manager' | 'hod' | 'rejected' | 'successful' | 'readme';
 
@@ -20,6 +21,7 @@ interface SidebarProps {
   onSelectTab: (tab: NavTab) => void;
   prfs: PRFItem[];
   onResetData: () => void;
+  userProfile?: UserProfile | null;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -27,6 +29,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectTab,
   prfs,
   onResetData,
+  userProfile,
 }) => {
   const pendingManagerCount = prfs.filter((p) => p.status === 'pending_manager').length;
   const pendingHodCount = prfs.filter((p) => p.status === 'pending_hod').length;
@@ -138,11 +141,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="p-3 border-t border-slate-800/80 bg-[#14171A]">
         <div className="flex items-center gap-3 p-2 rounded-lg bg-slate-800/40 border border-slate-700/40">
           <div className="w-8 h-8 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 flex items-center justify-center font-bold text-xs shrink-0">
-            SA
+            {(userProfile?.displayName || 'MP').substring(0, 2).toUpperCase()}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-xs font-semibold text-white truncate">Salmah Alimuddin</div>
-            <div className="text-[10px] text-slate-400 truncate">HR Talent & Culture</div>
+            <div className="text-xs font-semibold text-white truncate">
+              {userProfile?.displayName || 'Media Prima Staff'}
+            </div>
+            <div className="text-[10px] text-slate-400 truncate uppercase">
+              {userProfile?.deptSection || userProfile?.role || 'Portal User'}
+            </div>
           </div>
         </div>
 

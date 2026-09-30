@@ -15,14 +15,18 @@ import { PRFPreviewModal } from './components/PRFPreviewModal';
 import { ToastBanner, ToastMessage } from './components/ToastBanner';
 import { downloadPRFAsPDF } from './utils/pdfGenerator';
 import { PRFDocumentTemplate } from './components/PRFDocumentTemplate';
+import { AuthPage } from './components/AuthPage';
+import { MediaPrimaLogo } from './components/MediaPrimaLogo';
 import {
   subscribeToPrfs,
   savePrfToFirestore,
   updatePrfInFirestore,
   seedPrfDataIfEmpty,
-  signInWithGoogleAuth,
   signOutFromAuth,
   onAuthChange,
+  getUserProfile,
+  saveUserProfile,
+  UserProfile,
 } from './services/firebase';
 
 const STORAGE_KEY = 'media_prima_prf_records_v1';
@@ -47,13 +51,42 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [previewPrf, setPreviewPrf] = useState<PRFItem | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  // Authentication State
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   // Listen to Firebase Auth state
   useEffect(() => {
-    const unsubscribeAuth = onAuthChange((user) => {
+    const unsubscribeAuth = onAuthChange(async (user) => {
       setCurrentUser(user);
+      if (user) {
+        try {
+          let profile = await getUserProfile(user.uid);
+          if (!profile) {
+            profile = {
+              uid: user.uid,
+              email: user.email || '',
+              displayName: user.displayName || user.email?.split('@')[0] || 'Staff Member',
+              role: 'staff',
+              deptSection: 'HUMAN RESOURCES',
+              staffId: `MP-${Math.floor(1000 + Math.random() * 9000)}`,
+              createdAt: new Date().toISOString(),
+              lastLoginAt: new Date().toISOString(),
+            };
+            await saveUserProfile(profile);
+          }
+          setUserProfile(profile);
+        } catch (e) {
+          console.error('Error fetching user profile:', e);
+        }
+      } else {
+        setUserProfile(null);
+      }
+      setAuthLoading(false);
     });
+
     return () => unsubscribeAuth();
   }, []);
 
@@ -97,25 +130,22 @@ export default function App() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
-  // Google Login / Logout handlers
-  const handleSignIn = async () => {
-    try {
-      const user = await signInWithGoogleAuth();
-      if (user) {
-        addToast('success', 'Signed In Successfully', `Welcome, ${user.displayName || user.email}!`);
-      }
-    } catch (err) {
-      addToast('error', 'Sign In Failed', 'Unable to complete Google sign in.');
-    }
-  };
-
+  // Sign out handler
   const handleSignOut = async () => {
     try {
       await signOutFromAuth();
-      addToast('success', 'Signed Out', 'You have been signed out.');
+      setCurrentUser(null);
+      setUserProfile(null);
+      addToast('success', 'Log Keluar Berjaya', 'Anda telah log keluar daripada sistem.');
     } catch (err) {
-      addToast('error', 'Sign Out Error', 'Failed to sign out.');
+      addToast('error', 'Ralat Log Keluar', 'Gagal log keluar.');
     }
+  };
+
+  // Handler for successful authentication from AuthPage
+  const handleAuthSuccess = (profile: UserProfile) => {
+    setUserProfile(profile);
+    addToast('success', 'Selamat Datang!', `Log masuk sebagai ${profile.displayName} (${profile.role.toUpperCase()})`);
   };
 
   // Form submission: save to Firestore & update local state
@@ -273,6 +303,32 @@ export default function App() {
     }
   };
 
+  // 1. Loading screen while authenticating
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-[#191C21] flex flex-col items-center justify-center p-6 text-white select-none">
+        <div className="bg-white p-2.5 rounded-xl shadow-2xl mb-4">
+          <MediaPrimaLogo onWhiteBackground={false} />
+        </div>
+        <div className="flex items-center gap-2.5 text-slate-300 text-xs font-medium">
+          <span className="w-4 h-4 border-2 border-[#ED1C24] border-t-transparent rounded-full animate-spin"></span>
+          <span>Memuatkan Portal Media Prima...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // 2. Unauthenticated user: Show Sign In / Sign Up Page First
+  if (!currentUser && !userProfile) {
+    return (
+      <>
+        <ToastBanner toasts={toasts} onDismiss={removeToast} />
+        <AuthPage onAuthSuccess={handleAuthSuccess} />
+      </>
+    );
+  }
+
+  // 3. Authenticated user: Full Application Access
   return (
     <div className="flex h-screen bg-slate-100 font-sans overflow-hidden">
       {/* Toast Notifications */}
@@ -284,6 +340,7 @@ export default function App() {
         onSelectTab={setCurrentTab}
         prfs={prfs}
         onResetData={handleResetData}
+        userProfile={userProfile}
       />
 
       {/* Main Content Area */}
@@ -295,7 +352,7 @@ export default function App() {
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           currentUser={currentUser}
-          onSignIn={handleSignIn}
+          userProfile={userProfile}
           onSignOut={handleSignOut}
         />
 
@@ -315,6 +372,7 @@ export default function App() {
             <NewFormView
               onSubmit={handleCreateNewPrf}
               onCancel={() => setCurrentTab('dashboard')}
+              currentUserProfile={userProfile}
             />
           )}
 
