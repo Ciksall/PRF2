@@ -92,11 +92,13 @@ export default function App() {
     return () => unsubscribeAuth();
   }, []);
 
-  // Connect to Firestore real-time listener & seed initial data
+  // Connect to Firestore real-time listener & seed initial data only when authenticated
   useEffect(() => {
+    if (!currentUser) return;
+
     // Seed default sample PRF records if Firestore is completely empty
     seedPrfDataIfEmpty(INITIAL_PRF_DATA).catch((err) => {
-      console.error('Failed to seed initial data:', err);
+      console.warn('Note on seeding initial data:', err);
     });
 
     // Real-time listener from Firestore
@@ -110,12 +112,12 @@ export default function App() {
         }
       },
       (error) => {
-        console.error('Realtime Firestore sync error:', error);
+        console.warn('Realtime Firestore sync notice:', error);
       }
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [currentUser]);
 
   const addToast = (type: 'email' | 'success' | 'warning' | 'error', title: string, description?: string) => {
     const id = `toast-${Date.now()}-${Math.random()}`;
@@ -138,16 +140,16 @@ export default function App() {
       await signOutFromAuth();
       setCurrentUser(null);
       setUserProfile(null);
-      addToast('success', 'Log Keluar Berjaya', 'Anda telah log keluar daripada sistem.');
+      addToast('success', 'Signed Out Successfully', 'You have been signed out of the system.');
     } catch (err) {
-      addToast('error', 'Ralat Log Keluar', 'Gagal log keluar.');
+      addToast('error', 'Sign Out Error', 'Failed to sign out.');
     }
   };
 
   // Handler for successful authentication from AuthPage
   const handleAuthSuccess = (profile: UserProfile) => {
     setUserProfile(profile);
-    addToast('success', 'Selamat Datang!', `Log masuk sebagai ${profile.displayName} (${profile.role.toUpperCase()})`);
+    addToast('success', 'Welcome Back!', `Signed in as ${profile.displayName} (${profile.role.toUpperCase()})`);
   };
 
   // Handler to switch active user role (Staff, Superior, HOD)
@@ -166,7 +168,7 @@ export default function App() {
         : newRole === 'hod'
         ? 'Head of Department (HOD)'
         : 'Staff / Requester';
-    addToast('success', 'Peranan Ditukar', `Akses anda kini ditukar kepada ${roleLabel}.`);
+    addToast('success', 'Role Updated', `Your portal access is now set to ${roleLabel}.`);
   };
 
   // Form submission: save to Firestore & update local state

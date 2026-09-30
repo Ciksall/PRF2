@@ -108,14 +108,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-amber-900 uppercase tracking-wide">
-                  Akses Superior / Manager Diaktifkan
+                  Superior / Manager Access Active
                 </span>
                 <span className="px-1.5 py-0.2 bg-amber-200 text-amber-900 rounded text-[9px] font-bold">
                   {userProfile?.displayName || 'Superior'}
                 </span>
               </div>
               <p className="text-xs text-slate-600 mt-0.5">
-                Terdapat <strong>{pendingManagerCount}</strong> borang PRF memerlukan semakan & tandatangan pengesahan anda sebelum disalurkan ke HOD.
+                You have <strong>{pendingManagerCount}</strong> PRF submissions awaiting your review and verification signature before routing to HOD.
               </p>
             </div>
           </div>
@@ -123,7 +123,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             onClick={() => onNavigateTab('manager')}
             className="px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg shadow-xs flex items-center gap-2 transition active:scale-[0.98] shrink-0"
           >
-            <span>Buka Giliran Pengesahan Superior</span>
+            <span>Open Superior Verification Queue</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -138,14 +138,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-emerald-900 uppercase tracking-wide">
-                  Akses Head of Department (HOD) Diaktifkan
+                  Head of Department (HOD) Access Active
                 </span>
                 <span className="px-1.5 py-0.2 bg-emerald-200 text-emerald-900 rounded text-[9px] font-bold">
                   {userProfile?.displayName || 'HOD'}
                 </span>
               </div>
               <p className="text-xs text-slate-600 mt-0.5">
-                Terdapat <strong>{pendingHodCount}</strong> borang PRF sedia untuk kelulusan eksekutif muktamad sebelum pembayaran dibuat oleh Jabatan Kewangan.
+                You have <strong>{pendingHodCount}</strong> PRF submissions awaiting final executive approval before finance disbursement.
               </p>
             </div>
           </div>
@@ -153,7 +153,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             onClick={() => onNavigateTab('hod')}
             className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-xs flex items-center gap-2 transition active:scale-[0.98] shrink-0"
           >
-            <span>Buka Giliran Kelulusan HOD</span>
+            <span>Open HOD Approval Queue</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>

@@ -181,7 +181,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   type="button"
                   onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
-                  title="Klik untuk tukar peranan (Staff / Superior / HOD)"
+                  title="Click to switch role (Staff / Superior / HOD)"
                   className="hover:scale-105 transition cursor-pointer"
                 >
                   {getRoleBadge(currentRole)}
@@ -195,7 +195,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Logout button */}
             <button
               onClick={onSignOut}
-              title="Log Keluar (Sign Out)"
+              title="Sign Out"
               className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition ml-1 cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
@@ -206,8 +206,8 @@ export const Header: React.FC<HeaderProps> = ({
           {roleDropdownOpen && (
             <div className="absolute right-0 top-12 w-64 bg-white rounded-xl shadow-2xl border border-slate-200 p-2 z-50 animate-fadeIn text-xs">
               <div className="px-2.5 py-1.5 border-b border-slate-100 mb-1">
-                <div className="font-bold text-slate-900 text-[11px]">Tukar Peranan / Role Access</div>
-                <div className="text-[10px] text-slate-500">Pilih akses portal mengikut tugas anda</div>
+                <div className="font-bold text-slate-900 text-[11px]">Role Access</div>
+                <div className="text-[10px] text-slate-500">Select portal access based on your duties</div>
               </div>
 
               {/* Option 1: Staff / Requester */}
@@ -226,7 +226,7 @@ export const Header: React.FC<HeaderProps> = ({
                   </span>
                   <div>
                     <div className="text-xs font-bold">Staff / Requester</div>
-                    <div className="text-[10px] text-slate-500">Cipta & pantau status PRF</div>
+                    <div className="text-[10px] text-slate-500">Create & track PRF status</div>
                   </div>
                 </div>
                 {currentRole === 'staff' && <Check className="w-4 h-4 text-blue-600" />}
@@ -248,7 +248,7 @@ export const Header: React.FC<HeaderProps> = ({
                   </span>
                   <div>
                     <div className="text-xs font-bold">Superior / Manager</div>
-                    <div className="text-[10px] text-slate-500">Semak & sahkan borang bawahan</div>
+                    <div className="text-[10px] text-slate-500">Review & verify subordinate submissions</div>
                   </div>
                 </div>
                 {(currentRole === 'superior' || currentRole === 'manager') && (
@@ -272,7 +272,7 @@ export const Header: React.FC<HeaderProps> = ({
                   </span>
                   <div>
                     <div className="text-xs font-bold">HOD (Head of Department)</div>
-                    <div className="text-[10px] text-slate-500">Kelulusan akhir perbelanjaan</div>
+                    <div className="text-[10px] text-slate-500">Final executive expense approval</div>
                   </div>
                 </div>
                 {currentRole === 'hod' && <Check className="w-4 h-4 text-emerald-600" />}

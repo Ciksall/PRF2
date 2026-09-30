@@ -5,12 +5,10 @@ import {
   Mail,
   Lock,
   User as UserIcon,
-  Briefcase,
   Building2,
   AlertCircle,
-  CheckCircle2,
-  ShieldCheck,
   ArrowRight,
+  ShieldCheck,
   Sparkles,
 } from 'lucide-react';
 import { MediaPrimaLogo } from './MediaPrimaLogo';
@@ -19,6 +17,7 @@ import {
   signUpWithEmail,
   signInWithGoogleAuth,
   UserProfile,
+  UserRole,
 } from '../services/firebase';
 
 interface AuthPageProps {
@@ -67,11 +66,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
       onAuthSuccess(profile);
     } catch (err: any) {
       console.error('Sign in error:', err);
-      let msg = 'Gagal log masuk. Sila semak emel dan kata laluan anda.';
+      let msg = 'Sign in failed. Please verify your email and password.';
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
-        msg = 'Emel atau kata laluan tidak tepat. Sila cuba lagi atau daftar akaun baru.';
+        msg = 'Incorrect email or password. Please try again or create a new account.';
       } else if (err.code === 'auth/operation-not-allowed') {
-        msg = 'Log masuk emel/kata laluan belum diaktifkan di konsol Firebase. Sila gunakan "Log Masuk Google" di bawah.';
+        msg = 'Email/password sign-in is not enabled. Please use "Sign in with Google" below.';
       } else if (err.message) {
         msg = err.message;
       }
@@ -86,11 +85,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
     setErrorMessage(null);
 
     if (!name.trim()) {
-      setErrorMessage('Sila masukkan nama penuh anda.');
+      setErrorMessage('Please enter your full name.');
       return;
     }
     if (signupPassword.length < 6) {
-      setErrorMessage('Kata laluan mestilah sekurang-kurangnya 6 aksara.');
+      setErrorMessage('Password must be at least 6 characters.');
       return;
     }
 
@@ -100,18 +99,18 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
         signupEmail,
         signupPassword,
         name,
-        role,
+        role as UserRole,
         dept,
         staffId
       );
       onAuthSuccess(profile);
     } catch (err: any) {
       console.error('Sign up error:', err);
-      let msg = 'Gagal mendaftar akaun baru. Sila cuba lagi.';
+      let msg = 'Failed to register account. Please try again.';
       if (err.code === 'auth/email-already-in-use') {
-        msg = 'Emel ini telah didaftarkan. Sila log masuk atau gunakan emel lain.';
+        msg = 'This email is already registered. Please sign in or use another email.';
       } else if (err.code === 'auth/operation-not-allowed') {
-        msg = 'Pendaftaran emel belum diaktifkan di konsol Firebase. Sila gunakan "Log Masuk dengan Google".';
+        msg = 'Email registration is not enabled. Please use "Sign in with Google".';
       } else if (err.message) {
         msg = err.message;
       }
@@ -130,7 +129,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
     } catch (err: any) {
       console.error('Google sign in error:', err);
       if (err.code !== 'auth/popup-closed-by-user') {
-        setErrorMessage(err.message || 'Log masuk Google tidak berjaya.');
+        setErrorMessage(err.message || 'Google sign in was unsuccessful.');
       }
     } finally {
       setLoading(false);
@@ -151,7 +150,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
               Payment Requisition Form Portal
             </h2>
             <p className="text-xs text-slate-400 mt-1">
-              Sistem Pengesahan & Kelulusan Pembayaran Bersepadu
+              Integrated PRF Verification & Executive Approval System
             </p>
           </div>
 
@@ -169,7 +168,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
               }`}
             >
               <LogIn className="w-4 h-4" />
-              <span>Log Masuk (Sign In)</span>
+              <span>Sign In</span>
             </button>
             <button
               onClick={() => {
@@ -183,7 +182,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
               }`}
             >
               <UserPlus className="w-4 h-4" />
-              <span>Daftar Akaun (Sign Up)</span>
+              <span>Sign Up</span>
             </button>
           </div>
 
@@ -222,7 +221,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                     d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.24 6.59l4.04 3.15c.95-2.84 3.6-4.99 6.72-4.99z"
                   />
                 </svg>
-                <span>Log Masuk Menggunakan Google</span>
+                <span>Continue with Google</span>
               </button>
 
               <div className="relative my-4">
@@ -230,7 +229,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                   <div className="w-full border-t border-slate-200"></div>
                 </div>
                 <div className="relative flex justify-center text-[10px] uppercase font-bold text-slate-400">
-                  <span className="bg-white px-2">atau gunakan emel Media Prima</span>
+                  <span className="bg-white px-2">or continue with Media Prima email</span>
                 </div>
               </div>
             </div>
@@ -240,14 +239,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
               <form onSubmit={handleSignInSubmit} className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Emel Rasmi
+                    Corporate Email
                   </label>
                   <div className="relative">
                     <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="email"
                       required
-                      placeholder="nama@mediaprima.com.my"
+                      placeholder="name@mediaprima.com.my"
                       value={loginEmail}
                       onChange={(e) => setLoginEmail(e.target.value)}
                       className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition"
@@ -257,7 +256,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Kata Laluan
+                    Password
                   </label>
                   <div className="relative">
                     <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -281,7 +280,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                     <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                   ) : (
                     <>
-                      <span>Log Masuk</span>
+                      <span>Sign In</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
@@ -294,14 +293,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
               <form onSubmit={handleSignUpSubmit} className="space-y-3.5">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Nama Penuh
+                    Full Name
                   </label>
                   <div className="relative">
                     <UserIcon className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       required
-                      placeholder="cth. Salmah Binti Hashim"
+                      placeholder="e.g. Salmah Binti Alimuddin"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition"
@@ -312,11 +311,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      No. ID Staf
+                      Staff ID
                     </label>
                     <input
                       type="text"
-                      placeholder="cth. MP-5524"
+                      placeholder="e.g. MP-5524"
                       value={staffId}
                       onChange={(e) => setStaffId(e.target.value)}
                       className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition"
@@ -325,7 +324,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Peranan (Role)
+                      Portal Role
                     </label>
                     <select
                       value={role}
@@ -333,22 +332,22 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                       className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition bg-white"
                     >
                       <option value="staff">Staff / Requester</option>
-                      <option value="superior">Superior / Manager (Pengesah)</option>
-                      <option value="hod">HOD (Pelulus)</option>
+                      <option value="superior">Superior / Manager (Verifier)</option>
+                      <option value="hod">HOD (Approver)</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Bahagian / Jabatan
+                    Division / Department
                   </label>
                   <div className="relative">
                     <Building2 className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       required
-                      placeholder="cth. HUMAN RESOURCES"
+                      placeholder="e.g. HUMAN RESOURCES"
                       value={dept}
                       onChange={(e) => setDept(e.target.value)}
                       className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition"
@@ -358,14 +357,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Emel Rasmi
+                    Corporate Email
                   </label>
                   <div className="relative">
                     <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="email"
                       required
-                      placeholder="nama@mediaprima.com.my"
+                      placeholder="name@mediaprima.com.my"
                       value={signupEmail}
                       onChange={(e) => setSignupEmail(e.target.value)}
                       className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition"
@@ -375,14 +374,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Cipta Kata Laluan
+                    Create Password
                   </label>
                   <div className="relative">
                     <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="password"
                       required
-                      placeholder="Minimum 6 aksara"
+                      placeholder="Minimum 6 characters"
                       value={signupPassword}
                       onChange={(e) => setSignupPassword(e.target.value)}
                       className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition"
@@ -399,7 +398,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                     <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                   ) : (
                     <>
-                      <span>Daftar Akaun & Teruskan</span>
+                      <span>Register Account & Continue</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
@@ -411,7 +410,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
             <div className="mt-6 pt-5 border-t border-slate-200">
               <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                <span>Pilih Profil Demo Cepat:</span>
+                <span>Instant Quick Demo Profiles:</span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <button
@@ -427,7 +426,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                   onClick={() => handleQuickDemoFill('manager')}
                   className="p-2 border border-slate-200 rounded-lg text-left hover:border-amber-300 hover:bg-amber-50/50 transition group"
                 >
-                  <div className="text-[10px] font-bold text-slate-800 group-hover:text-amber-700">Manager</div>
+                  <div className="text-[10px] font-bold text-slate-800 group-hover:text-amber-700">Superior</div>
                   <div className="text-[9px] text-slate-500 truncate">Nor Intan</div>
                 </button>
                 <button
@@ -446,7 +445,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
         {/* Security & Multi-User Disclaimer Footer */}
         <div className="text-center text-[11px] text-slate-500 flex items-center justify-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Disimpan & diselaraskan secara langsung dalam Firebase Cloud Firestore.</span>
+          <span>Secured and synchronized in real-time with Firebase Cloud Firestore.</span>
         </div>
       </div>
     </div>

@@ -323,7 +323,7 @@ export async function seedPrfDataIfEmpty(initialData: PRFItem[]): Promise<void> 
       console.log('Seeding completed.');
     }
   } catch (error) {
-    handleFirestoreError(error, OperationType.GET, PRF_COLLECTION);
+    handleFirestoreError(error, OperationType.LIST, PRF_COLLECTION);
   }
 }
 
