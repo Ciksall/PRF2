@@ -8,10 +8,11 @@ import {
   CheckCircle2,
   FileText,
   RotateCcw,
+  BookOpen,
 } from 'lucide-react';
 import { PRFItem } from '../types';
 
-export type NavTab = 'dashboard' | 'new_form' | 'manager' | 'hod' | 'rejected' | 'successful';
+export type NavTab = 'dashboard' | 'new_form' | 'manager' | 'hod' | 'rejected' | 'successful' | 'readme';
 
 interface SidebarProps {
   currentTab: NavTab;
@@ -71,6 +72,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: CheckCircle2,
       count: successfulCount,
       badgeColor: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30',
+    },
+    {
+      id: 'readme' as NavTab,
+      label: 'README Hub',
+      icon: BookOpen,
+      count: undefined,
     },
   ];
 

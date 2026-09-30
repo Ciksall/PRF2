@@ -29,6 +29,8 @@ export const Header: React.FC<HeaderProps> = ({
         return { title: 'Rejected PRFs & Audit Remarks', subtitle: 'Historical audit log of rejected requisition requests' };
       case 'successful':
         return { title: 'Successful PRFs & PDF Export', subtitle: 'Fully approved documents ready for instant PDF download' };
+      case 'readme':
+        return { title: 'README Hub & Documentation', subtitle: 'System architecture, workflows, personnel directory, and compliance' };
     }
   };
 

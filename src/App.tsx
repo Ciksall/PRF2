@@ -9,6 +9,7 @@ import { ManagerQueueView } from './components/ManagerQueueView';
 import { HODQueueView } from './components/HODQueueView';
 import { RejectedView } from './components/RejectedView';
 import { SuccessfulView } from './components/SuccessfulView';
+import { ReadmeView } from './components/ReadmeView';
 import { PRFPreviewModal } from './components/PRFPreviewModal';
 import { ToastBanner, ToastMessage } from './components/ToastBanner';
 import { downloadPRFAsPDF } from './utils/pdfGenerator';
@@ -270,6 +271,10 @@ export default function App() {
               prfs={prfs}
               onViewPrfModal={setPreviewPrf}
             />
+          )}
+
+          {currentTab === 'readme' && (
+            <ReadmeView onNavigateTab={setCurrentTab} />
           )}
         </main>
       </div>
