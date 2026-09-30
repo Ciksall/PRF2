@@ -82,20 +82,20 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
           <a
-            href="https://ais-pre-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app"
+            href="https://prfhrd.ai.studio"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-3.5 bg-slate-50 hover:bg-red-50/50 border border-slate-200 hover:border-red-300 rounded-xl transition group flex items-start justify-between"
+            className="p-3.5 bg-red-50/40 hover:bg-red-50 border border-red-200 hover:border-red-400 rounded-xl transition group flex items-start justify-between"
           >
             <div>
-              <div className="text-xs font-bold text-slate-900 group-hover:text-red-700 flex items-center gap-1.5">
-                <span>🚀 Live Production Portal</span>
+              <div className="text-xs font-bold text-slate-900 group-hover:text-[#ED1C24] flex items-center gap-1.5">
+                <span>🚀 Official Production Portal</span>
               </div>
-              <p className="text-[11px] text-slate-500 mt-0.5 font-mono truncate max-w-[280px] sm:max-w-xs">
-                https://ais-pre-3ikqxfpkiqvhgzogs4nd64...
+              <p className="text-[12px] font-semibold text-[#ED1C24] mt-0.5 font-mono">
+                https://prfhrd.ai.studio
               </p>
             </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-red-600 shrink-0 mt-0.5" />
+            <ExternalLink className="w-4 h-4 text-[#ED1C24] group-hover:scale-110 transition shrink-0 mt-0.5" />
           </a>
 
           <a

@@ -1,6 +1,6 @@
 # Media Prima Payment Requisition Form (PRF) Management Portal
 
-[![Live Portal](https://img.shields.io/badge/Live_Portal-Visit_App-ED1C24?style=for-the-badge&logo=googlechrome&logoColor=white)](https://ais-pre-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app)
+[![Live Portal](https://img.shields.io/badge/Live_Portal-https%3A%2F%2Fprfhrd.ai.studio-ED1C24?style=for-the-badge&logo=googlechrome&logoColor=white)](https://prfhrd.ai.studio)
 [![Node.js](https://img.shields.io/badge/Node.js-22.x-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -15,7 +15,8 @@ Enterprise **Payment Requisition Form (PRF)** management system designed for **M
 
 | Environment | Portal URL | Status |
 |---|---|---|
-| 🚀 **Live Production App** | [https://ais-pre-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app](https://ais-pre-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app) | 🟢 Active & Deployed |
+| 🚀 **Official Production Portal** | [https://prfhrd.ai.studio](https://prfhrd.ai.studio) | 🟢 Active & Deployed |
+| ☁️ **Cloud Mirror (Direct URL)** | [https://ais-pre-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app](https://ais-pre-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app) | 🟢 Online Mirror |
 | 🛠️ **Development App** | [https://ais-dev-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app](https://ais-dev-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app) | 🟡 Dev Environment |
 | 📁 **GitHub Source Repo** | [https://github.com/Ciksall/PRF2](https://github.com/Ciksall/PRF2) | 📦 Repository |
 
