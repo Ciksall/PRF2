@@ -42,26 +42,28 @@ export const NewFormView: React.FC<NewFormViewProps> = ({ onSubmit, onCancel, cu
   );
   const [submissionDate, setSubmissionDate] = useState(todayStr);
 
-  // Expenses fields
-  const [accountName, setAccountName] = useState('');
-  const [bankName, setBankName] = useState('');
-  const [accountNo, setAccountNo] = useState('');
-  const [program, setProgram] = useState('');
-  const [eventDate, setEventDate] = useState('');
-  const [venue, setVenue] = useState('');
+  // Expenses fields - Pre-filled by default for immediate preview & review
+  const [accountName, setAccountName] = useState('ROYALE CHULAN KUALA LUMPUR');
+  const [bankName, setBankName] = useState('MALAYAN BANKING BERHAD (MAYBANK)');
+  const [accountNo, setAccountNo] = useState('514011598214');
+  const [program, setProgram] = useState('Executive Strategic Leadership & Talent Development Workshop 2026');
+  const [eventDate, setEventDate] = useState('15 - 17 October 2026');
+  const [venue, setVenue] = useState('Royale Chulan Damansara, Grand Ballroom');
   const [budgetCategory, setBudgetCategory] = useState('Training Budget');
   const [budgetNote, setBudgetNote] = useState('note: Including the trainer 1 pax');
   
   const [budgetBreakdown, setBudgetBreakdown] = useState<BudgetBreakdownItem[]>([
-    { id: '1', biz: 'Media Prima Television Networks', pax: 10, charge: 6000 },
+    { id: '1', biz: 'Media Prima Television Networks', pax: 14, charge: 8400 },
+    { id: '2', biz: 'The New Straits Times Press', pax: 8, charge: 4800 },
+    { id: '3', biz: 'REV Media Group', pax: 6, charge: 3600 },
   ]);
 
-  const [invoiceNo, setInvoiceNo] = useState('');
-  const [billAmount, setBillAmount] = useState<string>('');
+  const [invoiceNo, setInvoiceNo] = useState('RC-INV-2026-9041');
+  const [billAmount, setBillAmount] = useState<string>('16800.00');
   
   // Attachments & Signatures
-  const [invoiceFileName, setInvoiceFileName] = useState<string>('');
-  const [invoiceFileSize, setInvoiceFileSize] = useState<string>('');
+  const [invoiceFileName, setInvoiceFileName] = useState<string>('Royale_Chulan_Tax_Invoice_9041.pdf');
+  const [invoiceFileSize, setInvoiceFileSize] = useState<string>('1.4 MB');
   const [invoiceFileData, setInvoiceFileData] = useState<string>('');
 
   const [requesterSignature, setRequesterSignature] = useState<string | undefined>(SAMPLE_SIGNATURE_REQUESTER);
@@ -83,25 +85,87 @@ export const NewFormView: React.FC<NewFormViewProps> = ({ onSubmit, onCancel, cu
     }
   };
 
-  // Quick fill sample data for fast testing
-  const handleFillSample = () => {
-    setAccountName('ROYALE CHULAN KUALA LUMPUR');
-    setBankName('MALAYAN BANKING BERHAD (MAYBANK)');
-    setAccountNo('514011598214');
-    setProgram('Strategic Human Capital Leadership Masterclass 2026');
-    setEventDate('18 - 20 November 2026');
-    setVenue('Royale Chulan Damansara, Ballroom 2');
-    setInvoiceNo('RC-INV-2026-9482');
-    setBillAmount('14200.00');
-    setBudgetBreakdown([
-      { id: '1', biz: 'Media Prima Corporate HR', pax: 8, charge: 8000 },
-      { id: '2', biz: 'REV Media Group', pax: 6, charge: 6200 },
-    ]);
-    setInvoiceFileName('Royale_Chulan_Official_Quote_9482.pdf');
-    setInvoiceFileSize('1.2 MB');
-    setRequesterSignature(SAMPLE_SIGNATURE_REQUESTER);
+  // Quick fill preset templates
+  const handleApplyPreset = (presetType: 'royale' | 'berjaya' | 'simedarby' | 'lemeridien' | 'empty') => {
+    if (presetType === 'royale') {
+      setAccountName('ROYALE CHULAN KUALA LUMPUR');
+      setBankName('MALAYAN BANKING BERHAD (MAYBANK)');
+      setAccountNo('514011598214');
+      setProgram('Executive Strategic Leadership & Talent Development Workshop 2026');
+      setEventDate('15 - 17 October 2026');
+      setVenue('Royale Chulan Damansara, Grand Ballroom');
+      setInvoiceNo('RC-INV-2026-9041');
+      setBillAmount('16800.00');
+      setBudgetBreakdown([
+        { id: '1', biz: 'Media Prima Television Networks', pax: 14, charge: 8400 },
+        { id: '2', biz: 'The New Straits Times Press', pax: 8, charge: 4800 },
+        { id: '3', biz: 'REV Media Group', pax: 6, charge: 3600 },
+      ]);
+      setInvoiceFileName('Royale_Chulan_Tax_Invoice_9041.pdf');
+      setInvoiceFileSize('1.4 MB');
+      setRequesterSignature(SAMPLE_SIGNATURE_REQUESTER);
+    } else if (presetType === 'berjaya') {
+      setAccountName('BERJAYA TIMES SQUARE HOTEL SDN BHD');
+      setBankName('RHB BANK BERHAD');
+      setAccountNo('21415600049210');
+      setProgram('Media Technology & Generative AI Masterclass 2026');
+      setEventDate('22 October 2026');
+      setVenue('Manhattan Ballroom, Berjaya Times Square');
+      setInvoiceNo('BTSH-INV-2026-4402');
+      setBillAmount('9600.00');
+      setBudgetBreakdown([
+        { id: '1', biz: 'Digital Content & IT Engineering', pax: 12, charge: 9600 },
+      ]);
+      setInvoiceFileName('Berjaya_Banquet_Tax_Invoice_4402.pdf');
+      setInvoiceFileSize('1.1 MB');
+      setRequesterSignature(SAMPLE_SIGNATURE_REQUESTER);
+    } else if (presetType === 'simedarby') {
+      setAccountName('INSTITUTE OF CORPORATE DIRECTORS MALAYSIA');
+      setBankName('CIMB BANK BERHAD');
+      setAccountNo('8008741299');
+      setProgram('ESG & Corporate Governance Certification Course');
+      setEventDate('03 - 05 November 2026');
+      setVenue('Sime Darby Convention Centre, Bukit Kiara');
+      setInvoiceNo('ICDM-INV-2026-1120');
+      setBillAmount('7500.00');
+      setBudgetBreakdown([
+        { id: '1', biz: 'Corporate & Legal Affairs', pax: 5, charge: 7500 },
+      ]);
+      setInvoiceFileName('ICDM_Proforma_Invoice_1120.pdf');
+      setInvoiceFileSize('820 KB');
+      setRequesterSignature(SAMPLE_SIGNATURE_REQUESTER);
+    } else if (presetType === 'lemeridien') {
+      setAccountName('LE MERIDIEN PETALING JAYA');
+      setBankName('PUBLIC BANK BERHAD');
+      setAccountNo('3190843218');
+      setProgram('Annual HR Division Strategic Retreat & Workshop');
+      setEventDate('01 - 02 November 2026');
+      setVenue('Le Meridien Petaling Jaya, Grand Salon');
+      setInvoiceNo('LMPJ-2026-9901');
+      setBillAmount('18500.00');
+      setBudgetBreakdown([
+        { id: '1', biz: 'Human Resources Division', pax: 25, charge: 18500 },
+      ]);
+      setInvoiceFileName('LeMeridien_Quote_9901.pdf');
+      setInvoiceFileSize('1.3 MB');
+      setRequesterSignature(SAMPLE_SIGNATURE_REQUESTER);
+    } else if (presetType === 'empty') {
+      setAccountName('');
+      setBankName('');
+      setAccountNo('');
+      setProgram('');
+      setEventDate('');
+      setVenue('');
+      setInvoiceNo('');
+      setBillAmount('');
+      setBudgetBreakdown([{ id: '1', biz: '', pax: 1, charge: 0 }]);
+      setInvoiceFileName('');
+      setInvoiceFileSize('');
+    }
     setErrors({});
   };
+
+  const handleFillSample = () => handleApplyPreset('royale');
 
   const handleInvoiceUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -208,25 +272,91 @@ export const NewFormView: React.FC<NewFormViewProps> = ({ onSubmit, onCancel, cu
   return (
     <div className="p-6 max-w-6xl mx-auto">
       {/* Top Banner & Quick Fill */}
-      <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
-        <div>
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <FilePlus2 className="w-5 h-5 text-[#ED1C24]" />
-            New Payment Requisition Form (PRF)
-          </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Finance Department compliance: Cost Center and Broadcast Location are excluded.
-          </p>
+      <div className="mb-6 bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <FilePlus2 className="w-5 h-5 text-[#ED1C24]" />
+                Borang Permohonan Bayaran Baharu (PRF)
+              </h2>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                Siap Diisi (Pre-Filled)
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 mt-1">
+              Borang ini telah diisi dengan format piawai HR Media Prima. Anda boleh terus menyemak, menukar templat, atau klik Hantar.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleFillSample}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 rounded-lg transition shrink-0"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#ED1C24]" />
+            <span>Isi Semula (Reset Sample)</span>
+          </button>
         </div>
 
-        <button
-          type="button"
-          onClick={handleFillSample}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-          <span>Auto-fill Sample Data</span>
-        </button>
+        {/* Quick Template Selector Chips */}
+        <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+            Pilihan Templat Segera:
+          </span>
+          <button
+            type="button"
+            onClick={() => handleApplyPreset('royale')}
+            className={`px-2.5 py-1 text-xs rounded-lg font-medium transition border flex items-center gap-1.5 ${
+              accountName.includes('ROYALE CHULAN')
+                ? 'bg-red-50 border-red-300 text-red-700 font-bold shadow-2xs'
+                : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <span>🏨 Royale Chulan (RM 16,800)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleApplyPreset('berjaya')}
+            className={`px-2.5 py-1 text-xs rounded-lg font-medium transition border flex items-center gap-1.5 ${
+              accountName.includes('BERJAYA')
+                ? 'bg-red-50 border-red-300 text-red-700 font-bold shadow-2xs'
+                : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <span>🏢 Berjaya Times Square (RM 9,600)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleApplyPreset('simedarby')}
+            className={`px-2.5 py-1 text-xs rounded-lg font-medium transition border flex items-center gap-1.5 ${
+              accountName.includes('INSTITUTE')
+                ? 'bg-red-50 border-red-300 text-red-700 font-bold shadow-2xs'
+                : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <span>🏛️ Sime Darby Centre (RM 7,500)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleApplyPreset('lemeridien')}
+            className={`px-2.5 py-1 text-xs rounded-lg font-medium transition border flex items-center gap-1.5 ${
+              accountName.includes('LE MERIDIEN')
+                ? 'bg-red-50 border-red-300 text-red-700 font-bold shadow-2xs'
+                : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <span>🌟 Le Meridien PJ (RM 18,500)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleApplyPreset('empty')}
+            className="px-2.5 py-1 text-xs rounded-lg font-medium transition border bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100 ml-auto"
+          >
+            <span>Kosongkan Borang</span>
+          </button>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">

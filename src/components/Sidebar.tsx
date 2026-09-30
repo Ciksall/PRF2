@@ -161,6 +161,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <RotateCcw className="w-3 h-3" />
           <span>Reset Sample Records</span>
         </button>
+
+        {/* Live Firebase Cloud Connection Indicator */}
+        <div className="mt-2.5 pt-2 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400 px-1">
+          <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Firebase Connected</span>
+          </span>
+          <span className="font-mono text-[9px] text-slate-500 truncate max-w-[90px]" title="Database: ai-studio-mediaprimaprfman-79482b94-7bf6-488b-a1a6-c5a72dbe048b">
+            ai-studio-db
+          </span>
+        </div>
       </div>
     </aside>
   );

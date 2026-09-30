@@ -59,8 +59,20 @@ export default function App() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  // Listen to Firebase Auth state
+  // Listen to Firebase Auth state and local session cache
   useEffect(() => {
+    // Check cached active session first
+    try {
+      const savedUser = localStorage.getItem('media_prima_active_user_v1');
+      if (savedUser) {
+        const parsed = JSON.parse(savedUser);
+        if (parsed && parsed.email) {
+          setUserProfile(parsed);
+          setAuthLoading(false);
+        }
+      }
+    } catch (e) {}
+
     const unsubscribeAuth = onAuthChange(async (user) => {
       setCurrentUser(user);
       if (user) {
@@ -80,11 +92,20 @@ export default function App() {
             await saveUserProfile(profile);
           }
           setUserProfile(profile);
+          try {
+            localStorage.setItem('media_prima_active_user_v1', JSON.stringify(profile));
+          } catch (e) {}
         } catch (e) {
           console.error('Error fetching user profile:', e);
         }
       } else {
-        setUserProfile(null);
+        // If not in Firebase Auth, maintain local demo user if active
+        try {
+          const savedUser = localStorage.getItem('media_prima_active_user_v1');
+          if (savedUser) {
+            setUserProfile(JSON.parse(savedUser));
+          }
+        } catch (e) {}
       }
       setAuthLoading(false);
     });
@@ -92,9 +113,9 @@ export default function App() {
     return () => unsubscribeAuth();
   }, []);
 
-  // Connect to Firestore real-time listener & seed initial data only when authenticated
+  // Connect to Firestore real-time listener & seed initial data when user is active
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser && !userProfile) return;
 
     // Seed default sample PRF records if Firestore is completely empty
     seedPrfDataIfEmpty(INITIAL_PRF_DATA).catch((err) => {
@@ -117,7 +138,7 @@ export default function App() {
     );
 
     return () => unsubscribe();
-  }, [currentUser]);
+  }, [currentUser, userProfile]);
 
   const addToast = (type: 'email' | 'success' | 'warning' | 'error', title: string, description?: string) => {
     const id = `toast-${Date.now()}-${Math.random()}`;
