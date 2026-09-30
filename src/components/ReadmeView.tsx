@@ -16,6 +16,7 @@ import {
   Lock,
   Flame,
   FileCheck,
+  Globe,
 } from 'lucide-react';
 import { REQUESTER_PRESETS, DEFAULT_MANAGER, DEFAULT_HOD } from '../constants/presets';
 import { NavTab } from './Sidebar';
@@ -75,21 +76,41 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
           <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
             <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
-              <Flame className="w-4 h-4 text-orange-500" />
-              <span>Connected to Firebase Cloud Firestore</span>
+              <Globe className="w-4 h-4 text-blue-600" />
+              <span>English-Only Portal Interface</span>
             </div>
             <p className="text-slate-600 text-[11px] leading-relaxed">
-              All PRF documents, budget breakdowns, invoice attachments, and digital signatures are permanently persisted and synchronized in real-time via Cloud Firestore.
+              Standardized 100% in professional English across all navigation tabs, role switchers, alert banners, authentication screens, and audit logs.
             </p>
           </div>
 
           <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
             <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
-              <Lock className="w-4 h-4 text-blue-600" />
+              <Flame className="w-4 h-4 text-orange-500" />
+              <span>Connected to Firebase Cloud Firestore</span>
+            </div>
+            <p className="text-slate-600 text-[11px] leading-relaxed">
+              All PRF documents, budget breakdowns, invoice attachments, and digital signatures are permanently persisted and synchronized in real-time via Cloud Firestore with separated get & list security rules.
+            </p>
+          </div>
+
+          <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+              <Users className="w-4 h-4 text-amber-600" />
+              <span>3-Tier Organizational Role Access</span>
+            </div>
+            <p className="text-slate-600 text-[11px] leading-relaxed">
+              Cleaned and streamlined to 3 corporate roles: <strong>Staff / Requester</strong>, <strong>Superior / Manager</strong>, and <strong>HOD</strong>. Finance/Audit has been removed from role switcher and sign-up.
+            </p>
+          </div>
+
+          <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+              <Lock className="w-4 h-4 text-purple-600" />
               <span>Mandatory Sign In & Sign Up Gate</span>
             </div>
             <p className="text-slate-600 text-[11px] leading-relaxed">
-              Unauthenticated users are required to sign in with Google 1-click or official Media Prima credentials before accessing portal data.
+              Unauthenticated users are required to sign in with Google 1-click or corporate Media Prima credentials before accessing portal records, with listeners deferred until auth resolves.
             </p>
           </div>
 
@@ -110,16 +131,6 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
             </div>
             <p className="text-slate-600 text-[11px] leading-relaxed">
               Document verification follows the official 3-row layout: top row for digital signatures, middle row for full names and titles, bottom row for timestamps.
-            </p>
-          </div>
-
-          <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs md:col-span-2 lg:col-span-2">
-            <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
-              <Users className="w-4 h-4 text-amber-600" />
-              <span>Dedicated Superior & HOD Access (Interactive Role Switcher)</span>
-            </div>
-            <p className="text-slate-600 text-[11px] leading-relaxed">
-              The role badge on the top header can be clicked at any time to switch portal access between <strong>SUPERIOR</strong> (Verifier), <strong>HOD</strong> (Approver), or <strong>STAFF</strong> (Requester) with instant live Firestore synchronization. The dashboard also displays role-tailored action banners.
             </p>
           </div>
         </div>
