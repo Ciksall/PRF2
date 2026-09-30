@@ -17,6 +17,7 @@ import {
   Flame,
   FileCheck,
   Globe,
+  ExternalLink,
 } from 'lucide-react';
 import { REQUESTER_PRESETS, DEFAULT_MANAGER, DEFAULT_HOD } from '../constants/presets';
 import { NavTab } from './Sidebar';
@@ -63,6 +64,56 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
           <span>Target Template: <strong>SAMPLE PRF Royale Chulan_2.docx</strong></span>
           <span className="text-slate-300">·</span>
           <span>Database: <strong>Cloud Firestore (asia-southeast1)</strong></span>
+        </div>
+      </div>
+
+      {/* Live Application Links Card */}
+      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-slate-900 font-bold text-xs uppercase tracking-wider">
+            <Globe className="w-4 h-4 text-emerald-600" />
+            <span>Pautan Rasmi Portal (Live Website Links)</span>
+          </div>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            Online & Aktif
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+          <a
+            href="https://ais-pre-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-3.5 bg-slate-50 hover:bg-red-50/50 border border-slate-200 hover:border-red-300 rounded-xl transition group flex items-start justify-between"
+          >
+            <div>
+              <div className="text-xs font-bold text-slate-900 group-hover:text-red-700 flex items-center gap-1.5">
+                <span>🚀 Live Production Portal</span>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-0.5 font-mono truncate max-w-[280px] sm:max-w-xs">
+                https://ais-pre-3ikqxfpkiqvhgzogs4nd64...
+              </p>
+            </div>
+            <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-red-600 shrink-0 mt-0.5" />
+          </a>
+
+          <a
+            href="https://github.com/Ciksall/PRF2"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-3.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-slate-300 rounded-xl transition group flex items-start justify-between"
+          >
+            <div>
+              <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                <span>📁 GitHub Repository</span>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-0.5 font-mono">
+                github.com/Ciksall/PRF2
+              </p>
+            </div>
+            <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-slate-700 shrink-0 mt-0.5" />
+          </a>
         </div>
       </div>
 

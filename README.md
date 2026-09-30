@@ -1,5 +1,6 @@
 # Media Prima Payment Requisition Form (PRF) Management Portal
 
+[![Live Portal](https://img.shields.io/badge/Live_Portal-Visit_App-ED1C24?style=for-the-badge&logo=googlechrome&logoColor=white)](https://ais-pre-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app)
 [![Node.js](https://img.shields.io/badge/Node.js-22.x-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -7,6 +8,16 @@
 [![Firebase](https://img.shields.io/badge/Firebase-Firestore_%26_Auth-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com/)
 
 Enterprise **Payment Requisition Form (PRF)** management system designed for **Media Prima Berhad (Human Resources Division)** to generate, review, approve, and export audit-ready PDF payment requisitions with real-time Firebase Cloud Firestore synchronization and multi-tier organizational role verification.
+
+---
+
+## 🌐 Live Application Links
+
+| Environment | Portal URL | Status |
+|---|---|---|
+| 🚀 **Live Production App** | [https://ais-pre-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app](https://ais-pre-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app) | 🟢 Active & Deployed |
+| 🛠️ **Development App** | [https://ais-dev-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app](https://ais-dev-3ikqxfpkiqvhgzogs4nd64-422405250704.asia-east1.run.app) | 🟡 Dev Environment |
+| 📁 **GitHub Source Repo** | [https://github.com/Ciksall/PRF2](https://github.com/Ciksall/PRF2) | 📦 Repository |
 
 ---
 
