@@ -133,6 +133,26 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
               Document verification follows the official 3-row layout: top row for digital signatures, middle row for full names and titles, bottom row for timestamps.
             </p>
           </div>
+
+          <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+              <Sparkles className="w-4 h-4 text-amber-500" />
+              <span>Pre-Filled Form & 1-Click Templates</span>
+            </div>
+            <p className="text-slate-600 text-[11px] leading-relaxed">
+              New PRF form is automatically pre-filled with standard HR training details, with 1-click preset chips for Royale Chulan, Berjaya, Sime Darby, and Le Meridien.
+            </p>
+          </div>
+
+          <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+              <Database className="w-4 h-4 text-indigo-600" />
+              <span>Resilient Long-Polling Firestore</span>
+            </div>
+            <p className="text-slate-600 text-[11px] leading-relaxed">
+              Configured with auto-detect long-polling and seamless authentication failover, ensuring 100% uptime and offline resilience across all browser environments.
+            </p>
+          </div>
         </div>
       </div>
 
