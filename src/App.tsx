@@ -26,7 +26,9 @@ import {
   onAuthChange,
   getUserProfile,
   saveUserProfile,
+  updateUserRole,
   UserProfile,
+  UserRole,
 } from './services/firebase';
 
 const STORAGE_KEY = 'media_prima_prf_records_v1';
@@ -146,6 +148,25 @@ export default function App() {
   const handleAuthSuccess = (profile: UserProfile) => {
     setUserProfile(profile);
     addToast('success', 'Selamat Datang!', `Log masuk sebagai ${profile.displayName} (${profile.role.toUpperCase()})`);
+  };
+
+  // Handler to switch active user role (Staff, Superior, HOD)
+  const handleUpdateRole = async (newRole: UserRole) => {
+    if (!currentUser || !userProfile) return;
+    const updated: UserProfile = { ...userProfile, role: newRole };
+    setUserProfile(updated);
+    try {
+      await updateUserRole(currentUser.uid, newRole);
+    } catch (e) {
+      console.error('Failed to update role in Firestore:', e);
+    }
+    const roleLabel =
+      newRole === 'superior' || newRole === 'manager'
+        ? 'Superior / Manager'
+        : newRole === 'hod'
+        ? 'Head of Department (HOD)'
+        : 'Staff / Requester';
+    addToast('success', 'Peranan Ditukar', `Akses anda kini ditukar kepada ${roleLabel}.`);
   };
 
   // Form submission: save to Firestore & update local state
@@ -354,6 +375,8 @@ export default function App() {
           currentUser={currentUser}
           userProfile={userProfile}
           onSignOut={handleSignOut}
+          onUpdateRole={handleUpdateRole}
+          onNavigateTab={setCurrentTab}
         />
 
         {/* View Switcher Container */}
@@ -365,6 +388,8 @@ export default function App() {
               onViewPrfModal={setPreviewPrf}
               onDownloadPdf={handleDirectDownloadPdf}
               searchQuery={searchQuery}
+              userProfile={userProfile}
+              onUpdateRole={handleUpdateRole}
             />
           )}
 
@@ -382,6 +407,7 @@ export default function App() {
               onApprove={handleManagerApprove}
               onReject={handleManagerReject}
               onViewPrfModal={setPreviewPrf}
+              currentUserProfile={userProfile}
             />
           )}
 
@@ -391,6 +417,7 @@ export default function App() {
               onApprove={handleHODApprove}
               onReject={handleHODReject}
               onViewPrfModal={setPreviewPrf}
+              currentUserProfile={userProfile}
             />
           )}
 

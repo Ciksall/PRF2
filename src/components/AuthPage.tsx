@@ -38,7 +38,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
   const [name, setName] = useState('');
   const [staffId, setStaffId] = useState('');
   const [dept, setDept] = useState('HUMAN RESOURCES');
-  const [role, setRole] = useState<'staff' | 'manager' | 'hod' | 'finance'>('staff');
+  const [role, setRole] = useState<'staff' | 'superior' | 'manager' | 'hod'>('staff');
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
 
@@ -333,9 +333,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
                       className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition bg-white"
                     >
                       <option value="staff">Staff / Requester</option>
-                      <option value="manager">Manager (Pengesah)</option>
+                      <option value="superior">Superior / Manager (Pengesah)</option>
                       <option value="hod">HOD (Pelulus)</option>
-                      <option value="finance">Finance / Audit</option>
                     </select>
                   </div>
                 </div>

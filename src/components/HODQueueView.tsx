@@ -11,12 +11,14 @@ import {
 import { PRFItem } from '../types';
 import { DEFAULT_HOD, DEFAULT_MANAGER, SAMPLE_SIGNATURE_HOD } from '../constants/presets';
 import { SignaturePad } from './SignaturePad';
+import { UserProfile } from '../services/firebase';
 
 interface HODQueueViewProps {
   prfs: PRFItem[];
   onApprove: (prfId: string, hodSignature: string) => void;
   onReject: (prfId: string, remarks: string) => void;
   onViewPrfModal: (prf: PRFItem) => void;
+  currentUserProfile?: UserProfile | null;
 }
 
 export const HODQueueView: React.FC<HODQueueViewProps> = ({
@@ -24,6 +26,7 @@ export const HODQueueView: React.FC<HODQueueViewProps> = ({
   onApprove,
   onReject,
   onViewPrfModal,
+  currentUserProfile,
 }) => {
   const pendingPrfs = prfs.filter((p) => p.status === 'pending_hod');
 
@@ -106,7 +109,11 @@ export const HODQueueView: React.FC<HODQueueViewProps> = ({
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Approved by: <strong className="text-slate-800">{DEFAULT_HOD.name}</strong> ({DEFAULT_HOD.title})
+            Approved by:{' '}
+            <strong className="text-slate-800">
+              {currentUserProfile?.role === 'hod' ? currentUserProfile.displayName : DEFAULT_HOD.name}
+            </strong>{' '}
+            ({DEFAULT_HOD.title})
           </p>
         </div>
       </div>

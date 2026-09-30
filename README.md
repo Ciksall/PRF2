@@ -45,6 +45,14 @@ The **Media Prima PRF Management Portal** simplifies PRF creation and eliminates
     - **Lajur 2**: `DATE: [Tarikh Pengesahan Manager]`
     - **Lajur 3**: `DATE: [Tarikh Kelulusan HOD]`
 
+### 5. 👔 Akses Khusus Superior & HOD serta Penukar Peranan Interaktif (*Interactive Role Switcher*)
+- **Penukar Peranan Pantas Pada Header**: Lencana peranan pengguna (cth: `[STAFF]`) kini interaktif dan boleh diklik untuk menukar peranan secara serta-merta kepada **SUPERIOR / MANAGER**, **HOD (Head of Department)**, atau **STAFF**.
+- **Penyimpanan Peranan ke Firestore**: Sebarang pertukaran peranan terus disimpan ke pengkalan data Firestore (`users/{userId}`) secara automatik.
+- **Papan Pemuka Khusus (*Role-Tailored Dashboard*)**:
+  - Apabila peranan **Superior / Manager** aktif: Banner amaran dan notifikasi permohonan menunggu semakan Superior dipaparkan berserta butang 1-klik ke **Giliran Pengesahan Superior**.
+  - Apabila peranan **HOD** aktif: Banner amaran kelulusan eksekutif dipaparkan berserta butang 1-klik ke **Giliran Kelulusan HOD**.
+- **Identiti Penandatangan Dinamik**: Nama pegawai yang mengesahkan (Superior) dan meluluskan (HOD) dipadankan secara langsung dengan profil pengguna aktif.
+
 ---
 
 ## 📋 Ciri-Ciri Utama Sistem

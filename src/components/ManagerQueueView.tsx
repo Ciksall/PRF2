@@ -15,12 +15,14 @@ import {
 import { PRFItem } from '../types';
 import { DEFAULT_MANAGER, SAMPLE_SIGNATURE_MANAGER } from '../constants/presets';
 import { SignaturePad } from './SignaturePad';
+import { UserProfile } from '../services/firebase';
 
 interface ManagerQueueViewProps {
   prfs: PRFItem[];
   onApprove: (prfId: string, managerSignature: string) => void;
   onReject: (prfId: string, remarks: string) => void;
   onViewPrfModal: (prf: PRFItem) => void;
+  currentUserProfile?: UserProfile | null;
 }
 
 export const ManagerQueueView: React.FC<ManagerQueueViewProps> = ({
@@ -28,6 +30,7 @@ export const ManagerQueueView: React.FC<ManagerQueueViewProps> = ({
   onApprove,
   onReject,
   onViewPrfModal,
+  currentUserProfile,
 }) => {
   const pendingPrfs = prfs.filter((p) => p.status === 'pending_manager');
 
@@ -110,13 +113,19 @@ export const ManagerQueueView: React.FC<ManagerQueueViewProps> = ({
         <div>
           <div className="flex items-center gap-2">
             <UserCheck className="w-5 h-5 text-amber-600" />
-            <h2 className="text-base font-bold text-slate-900">Manager Verification Queue</h2>
+            <h2 className="text-base font-bold text-slate-900">Superior / Manager Verification Queue</h2>
             <span className="bg-amber-100 text-amber-800 font-mono text-xs px-2 py-0.5 rounded-full font-bold">
               {pendingPrfs.length} Pending
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Verified by: <strong className="text-slate-800">{DEFAULT_MANAGER.name}</strong> ({DEFAULT_MANAGER.title})
+            Verified by:{' '}
+            <strong className="text-slate-800">
+              {currentUserProfile?.role === 'superior' || currentUserProfile?.role === 'manager'
+                ? currentUserProfile.displayName
+                : DEFAULT_MANAGER.name}
+            </strong>{' '}
+            ({DEFAULT_MANAGER.title})
           </p>
         </div>
       </div>

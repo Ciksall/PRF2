@@ -51,14 +51,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
     {
       id: 'manager' as NavTab,
-      label: 'Manager',
+      label: 'Superior / Manager',
       icon: UserCheck,
       count: pendingManagerCount,
       badgeColor: 'bg-amber-500/20 text-amber-300 border border-amber-500/30',
     },
     {
       id: 'hod' as NavTab,
-      label: 'HOD',
+      label: 'HOD (Head of Dept)',
       icon: Award,
       count: pendingHodCount,
       badgeColor: 'bg-sky-500/20 text-sky-300 border border-sky-500/30',

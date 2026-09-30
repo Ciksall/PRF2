@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import { PRFItem, PRFStatus } from '../types';
 import { NavTab } from './Sidebar';
+import { UserProfile, UserRole } from '../services/firebase';
+import { UserCheck, Shield, Sparkles } from 'lucide-react';
 
 interface DashboardViewProps {
   prfs: PRFItem[];
@@ -20,6 +22,8 @@ interface DashboardViewProps {
   onViewPrfModal: (prf: PRFItem) => void;
   onDownloadPdf: (prf: PRFItem) => void;
   searchQuery: string;
+  userProfile?: UserProfile | null;
+  onUpdateRole?: (role: UserRole) => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
@@ -28,6 +32,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onViewPrfModal,
   onDownloadPdf,
   searchQuery,
+  userProfile,
+  onUpdateRole,
 }) => {
   const [statusFilter, setStatusFilter] = useState<'all' | PRFStatus>('all');
 
@@ -88,8 +94,71 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     }
   };
 
+  const activeRole = userProfile?.role || 'staff';
+
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
+      {/* Role-Based Greeting & Queue Shortcuts */}
+      {(activeRole === 'superior' || activeRole === 'manager') && (
+        <div className="p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-50 to-white border border-amber-200/80 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-sm">
+              <UserCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-amber-900 uppercase tracking-wide">
+                  Akses Superior / Manager Diaktifkan
+                </span>
+                <span className="px-1.5 py-0.2 bg-amber-200 text-amber-900 rounded text-[9px] font-bold">
+                  {userProfile?.displayName || 'Superior'}
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 mt-0.5">
+                Terdapat <strong>{pendingManagerCount}</strong> borang PRF memerlukan semakan & tandatangan pengesahan anda sebelum disalurkan ke HOD.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => onNavigateTab('manager')}
+            className="px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg shadow-xs flex items-center gap-2 transition active:scale-[0.98] shrink-0"
+          >
+            <span>Buka Giliran Pengesahan Superior</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
+      {activeRole === 'hod' && (
+        <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-500/10 via-emerald-50 to-white border border-emerald-200/80 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+              <Award className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-emerald-900 uppercase tracking-wide">
+                  Akses Head of Department (HOD) Diaktifkan
+                </span>
+                <span className="px-1.5 py-0.2 bg-emerald-200 text-emerald-900 rounded text-[9px] font-bold">
+                  {userProfile?.displayName || 'HOD'}
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 mt-0.5">
+                Terdapat <strong>{pendingHodCount}</strong> borang PRF sedia untuk kelulusan eksekutif muktamad sebelum pembayaran dibuat oleh Jabatan Kewangan.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => onNavigateTab('hod')}
+            className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-xs flex items-center gap-2 transition active:scale-[0.98] shrink-0"
+          >
+            <span>Buka Giliran Kelulusan HOD</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* Metrics Row */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         {/* Total PRFs */}

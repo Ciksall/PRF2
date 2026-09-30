@@ -72,7 +72,7 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
           <span>Ringkasan Perubahan & Ciri Terkini yang Ditambah</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
           <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
             <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
               <Flame className="w-4 h-4 text-orange-500" />
@@ -110,6 +110,16 @@ export const ReadmeView: React.FC<ReadmeViewProps> = ({ onNavigateTab }) => {
             </div>
             <p className="text-slate-600 text-[11px] leading-relaxed">
               Susun atur pengesahan PRF dikemas kini mengikut spesifikasi gambar dengan baris atas bagi tandatangan, baris tengah bagi nama & jawatan penuh, dan baris bawah bagi tarikh.
+            </p>
+          </div>
+
+          <div className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs md:col-span-2 lg:col-span-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+              <Users className="w-4 h-4 text-amber-600" />
+              <span>Akses Khusus Superior & HOD (Role Switcher Interaktif)</span>
+            </div>
+            <p className="text-slate-600 text-[11px] leading-relaxed">
+              Lencana peranan pada bar atas (Header) kini boleh diklik bila-bila masa untuk menukar akses kepada <strong>SUPERIOR</strong> (Pengesah), <strong>HOD</strong> (Pelulus), atau <strong>STAFF</strong> (Pemohon) secara langsung serta dikemas kini di Firestore. Papan pemuka turut menyediakan banner tindakan pantas bagi setiap peranan.
             </p>
           </div>
         </div>

@@ -59,11 +59,13 @@ export interface FirestoreErrorInfo {
   };
 }
 
+export type UserRole = 'staff' | 'superior' | 'manager' | 'hod';
+
 export interface UserProfile {
   uid: string;
   email: string;
   displayName: string;
-  role: 'staff' | 'manager' | 'hod' | 'finance' | 'admin';
+  role: UserRole;
   deptSection?: string;
   staffId?: string;
   createdAt: string;
@@ -121,6 +123,18 @@ export async function saveUserProfile(profile: UserProfile): Promise<void> {
 }
 
 /**
+ * Update user role in Firestore
+ */
+export async function updateUserRole(uid: string, role: UserRole): Promise<void> {
+  const docRef = doc(db, USERS_COLLECTION, uid);
+  try {
+    await updateDoc(docRef, { role, lastLoginAt: new Date().toISOString() });
+  } catch (error) {
+    handleFirestoreError(error, OperationType.UPDATE, `${USERS_COLLECTION}/${uid}`);
+  }
+}
+
+/**
  * Get user profile from Firestore
  */
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
@@ -138,13 +152,27 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
 }
 
 /**
+ * Determine default role based on email if known Media Prima personnel
+ */
+function inferRoleFromEmail(email: string): UserRole {
+  const lower = email.toLowerCase();
+  if (lower.includes('norintan') || lower.includes('hasalimah') || lower.includes('superior') || lower.includes('manager')) {
+    return 'superior';
+  }
+  if (lower.includes('dona') || lower.includes('zawina') || lower.includes('hod')) {
+    return 'hod';
+  }
+  return 'staff';
+}
+
+/**
  * Sign up with Email and Password
  */
 export async function signUpWithEmail(
   email: string,
   pass: string,
   displayName: string,
-  role: 'staff' | 'manager' | 'hod' | 'finance' | 'admin' = 'staff',
+  role: UserRole = 'staff',
   deptSection: string = 'HUMAN RESOURCES',
   staffId: string = ''
 ): Promise<UserProfile> {
@@ -155,7 +183,7 @@ export async function signUpWithEmail(
     uid: credential.user.uid,
     email: credential.user.email || email,
     displayName: displayName || email.split('@')[0],
-    role,
+    role: role || inferRoleFromEmail(email),
     deptSection,
     staffId: staffId || `MP-${Math.floor(1000 + Math.random() * 9000)}`,
     createdAt: new Date().toISOString(),
@@ -179,7 +207,7 @@ export async function signInWithEmail(email: string, pass: string): Promise<User
       uid,
       email: credential.user.email || email,
       displayName: credential.user.displayName || email.split('@')[0],
-      role: 'staff',
+      role: inferRoleFromEmail(email),
       deptSection: 'HUMAN RESOURCES',
       staffId: `MP-${Math.floor(1000 + Math.random() * 9000)}`,
       createdAt: new Date().toISOString(),
@@ -207,7 +235,7 @@ export async function signInWithGoogleAuth(): Promise<{ user: User; profile: Use
         uid: user.uid,
         email: user.email || '',
         displayName: user.displayName || user.email?.split('@')[0] || 'Staff Member',
-        role: 'staff',
+        role: inferRoleFromEmail(user.email || ''),
         deptSection: 'HUMAN RESOURCES',
         staffId: `MP-${Math.floor(1000 + Math.random() * 9000)}`,
         createdAt: new Date().toISOString(),
